@@ -1,2 +1,2 @@
 # ransomware developement
-Academic purpose only.
+Simple ransomware. Academic purpose only.
