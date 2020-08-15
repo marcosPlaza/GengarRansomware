@@ -9,9 +9,6 @@ import sys
 import os
 from cryptography.fernet import Fernet 
 
-action = 'encrypt'
-
-
 """
 	Funcion para mostrar el titulo con el nombre del programa
 """
@@ -34,7 +31,6 @@ def help():
 	print('(-a) Para decidir que accion realizar.')
 	print('\t Introducir encrypt para encriptar.')
 	print('\t Introducir decrypt para desencriptar.')
-	print('(-k) Para introducir la clave para desencriptar.')
 	print('************************************************************************')
 
 """
@@ -53,71 +49,65 @@ def load_key():
     return open("key.key", "rb").read()
 
 """
-	Copiamos el contenido (str/bytes) encriptado en un nuevo archivo
+	Cargar datos de un fichero
 """
-def encrypt(filename, key):
+def load_data(filename):
+	with open(filename, 'rb') as file:
+		return file.read()
+
+"""
+	Salvar datos a un fichero
+"""
+def save_data(filename, data):
+	 with open(filename, 'wb') as file:
+			file.write(data)
+
+"""
+	Funcion para encriptar o desencriptar
+"""
+def encrypt_decrypt(filename, key, action):
 	f = Fernet(key)
 
-	with open(filename, 'rb') as file:
-		file_data = file.read()
+	data = load_data(filename)
 
-	encrypted_data = f.encrypt(file_data)
+	if action.lower() == 'encrypt':
+		encrypted_data = f.encrypt(data)
+		save_data(filename, encrypted_data)
+		print('\t\t\tENCRYPTION SUCCESSFUL')
+		print('************************************************************************')
 
-	with open(filename, 'wb') as file:
-		file.write(encrypted_data)
+	elif action.lower() == 'decrypt':
+		decrypted_data = f.decrypt(data)
+		save_data(filename, decrypted_data)
+		print('\t\t\tDECRYPTION SUCCESSFUL')
+		print('************************************************************************')
 
-"""
-	Proceso inverso a la anterior funcion. Volcamos el texto desencriptado a un nuevo archivo
-"""
-def decrypt(filename, key):
-    f = Fernet(key)
-
-    with open(filename, "rb") as file:
-        encrypted_data = file.read()
-
-    decrypted_data = f.decrypt(encrypted_data)
-
-    with open(filename, "wb") as file:
-        file.write(decrypted_data)
+	else:
+		raise Exception('Accion invalida') 
 
 if __name__ == '__main__':
-
 	display_title()
-
-	print("Numero de argumentos introducidos: " + str(len(sys.argv)))
 		
 	try:
 		# ayuda
 		if (len(sys.argv) == 2) and (sys.argv[1] == '-h'):
 			help()
 
-		# encriptar
+		# encryption/decryption
 		elif (len(sys.argv) == 5) and (sys.argv[1] == '-p') and (sys.argv[3] == '-a'):
 			path = sys.argv[2]
 			action = sys.argv[4]
-			if action.lower() == 'encrypt':
-				files = os.listdir(path=path)
-				write_key()
-				key = load_key()
-				for f in files:
-					full_path = path + os.sep + f
-					encrypt(full_path, key)
-			else:
-				raise Exception('Accion invalida')
 
-		# desencriptar
-		elif (len(sys.argv) == 7) and (sys.argv[1] == '-p') and (sys.argv[3] == '-a') and (sys.argv[5] == '-k'):
-			path = sys.argv[2]
-			action = sys.argv[4]
-			if action.lower() == 'decrypt':
-				files = os.listdir(path=path)
-				key = sys.argv[6]
-				for f in files:
-					full_path = path + os.sep + f
-					decrypt(full_path, key)
-			else:
-				raise Exception('Accion invalida')
+			files = os.listdir(path=path)
+			if action == 'encrypt': write_key()
+			key = load_key()
+
+			for f in files:
+				full_path = path + os.sep + f
+				encrypt_decrypt(full_path, key, action)
+
 		else:
-			raise Exception('Argumentos mal introducidos\n\t(-h) Para mostrar el menu de ayuda')
+			raise Exception('Argumentos mal introducidos\n\t (-h) Para mostrar el menu de ayuda')
+
 	except Exception as e:
 		print(e)

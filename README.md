@@ -27,5 +27,5 @@ pyhton3 main.py -p ~/dir1/dir2/target -a encrypt
 ### Decrypt
 
 ```
-pyhton3 main.py -p ~/dir1/dir2/target -a decrypt -k 8qbyg_-jUVt6q5rly7G3a23t71rOogBz5M0Tk3SWCFs=
+pyhton3 main.py -p ~/dir1/dir2/target -a decrypt
 ```
