@@ -8,7 +8,6 @@ Different options to work with:
 * (-h) Help menu.
 * (-p) Path to the directory files you want to encrypt/decrypt.
 * (-a) Action you want to do. Only two possible values: 'encrypt' or 'decrypt'.
-* (-k) If action is 'decrypt', intro the key located in key.key in order to decrypt.
 
 ## Usage examples
 
