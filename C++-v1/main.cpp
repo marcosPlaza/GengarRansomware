@@ -1,8 +1,9 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include <fstream>
-#include <openssl/err.h>
+#include <iostream>
 
 using namespace std;
 
@@ -16,40 +17,29 @@ int main(int argc, const char**argv) {
     DIR *dp = nullptr;
 
     dp = opendir(argc > 1 ? argv[1] : "/"); // If nothing entered on args we'll go to root
+    cout<<dp<<endl;
+
 
     // Only browsing by the entry given. Not all the directories on the computer
     if (dp != nullptr) {
         while ((entry = readdir(dp)))
-            printf("%s\n", entry->d_name);
+        	char* file_name = entry->d_name;
+        	printf("%s\n", file_name);
 
-        	fstream f;
+        	if(entry->d_name.compare("file1.txt") == 0){
+        		fstream fs;
+  				fs.open (entry->d_name, fstream::in | fstream::out | std::fstream::app);
 
-        	/*FILE * pFile;
-  			long lSize;
-  			char * buffer;
-  			size_t result;
-
-  			pFile = fopen (entry->d_name, "rb" );
-  			if (pFile==NULL) {fputs ("File error",stderr); exit (1);}
-
-  			// obtain file size:
-  			fseek(pFile, 0, SEEK_END);
-  			lSize = ftell (pFile);
-  			rewind(pFile);
-
-  			// allocate memory to contain the whole file:
-			buffer = (char*) malloc(sizeof(char)*lSize);
-			if (buffer == NULL) {fputs("Memory error",stderr); exit (2);}
-
-			// copy the file into the buffer:
-			result = fread (buffer,1,lSize,pFile);
-			if (result != lSize) {fputs("Reading error",stderr); exit (3);}
-
-			//the whole file is now loaded in the memory buffer
-
-			// terminate
-			fclose (pFile);
-			free (buffer);*/
+  				if (fs.is_open()){
+					cout << "Operation successfully performed";
+					fs << " more lorem ipsum";
+					fs.close();
+  				}
+	  			else
+	  			{
+	    			cout << "Error opening file";
+	  			}
+        	}
 
     }
     closedir(dp);
