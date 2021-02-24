@@ -2,7 +2,7 @@
 
 Very simple ransomware. Works with plain text files, with a symmetric encription. Academic purpose only.
 
-## Getting Started
+## (Currently deprecated) Getting Started
 
 Different options to work with:
 * (-h) Help menu.
