@@ -23,6 +23,7 @@ def decrypt(filename, key):
 		decrypted_data = f.decrypt(data)
 		save_data(filename, decrypted_data)
 	except ValueError as ve:
+		print(ve)
 		sg.theme('DarkPurple5')
 		sg.Popup('Wrong key', keep_on_top=True, no_titlebar=True)
 		raise Exception('Wrong key')
