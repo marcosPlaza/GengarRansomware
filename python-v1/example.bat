@@ -1,2 +1,0 @@
-encryptor.exe
-decryptor.exe
