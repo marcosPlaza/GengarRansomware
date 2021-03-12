@@ -4,6 +4,10 @@ import platform
 import win32api
 
 class Utils():
+
+    def __init__(self):
+        pass
+    
     BRAND_NAME = 'moonfall'
     BRAND_EXT = '.moonfall'
 
