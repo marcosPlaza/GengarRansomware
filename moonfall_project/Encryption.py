@@ -18,7 +18,7 @@ import sys
 
 if __name__ == '__main__':
     cipher = Cipher(action='encrypt')
-    cipher.save_key_as_file(hidden=False)
+    cipher.save_key_as_file()
 
     if not cipher.is_windows():
         print('Nothing to do here')
