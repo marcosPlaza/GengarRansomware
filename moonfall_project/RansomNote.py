@@ -23,4 +23,17 @@ class RansomNote(object):
                [sg.Button('Decrypt files')]]
 
         window = sg.Window('Title', layout, no_titlebar=True, keep_on_top=True, element_justification='c')
-        self.note = window
+        self.note = window 
+    
+    def close_note():
+        self.note.close()
+
+# TODO generalizar esta funcion en una cuyo parametro seaa el texto
+def wrong_key_popup():
+    sg.theme('DarkPurple5')
+    sg.Popup('Wrong key', keep_on_top=True, no_titlebar=True)
+    
+def bye_cha():
+    sg.theme('DarkPurple5')
+    sg.Popup("All data was decrypted successfully. Be careful on the internet next time ;)", keep_on_top=True, no_titlebar=True)
+    

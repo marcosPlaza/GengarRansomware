@@ -40,7 +40,7 @@ class Utils():
         return os.path.splitext(full_path)[1]
 
     def save_data(self, full_path, data, opt='add_ext'):
-        if not os.access(full_path, os.W_OK):
+        if not os.access(full_path, os.W_OK): # Doble comprobacion de los permisos.TODO ¿es estrcitamente necesario?
             oschmod.set_mode(full_path, "a+rwx,g-w,o-x")
             if not os.access(full_path, os.W_OK):
                 raise PermissionError("Write permissions can't be modified")

