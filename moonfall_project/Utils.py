@@ -53,7 +53,7 @@ class Utils():
         elif opt == 'del_ext':
             os.rename(full_path, full_path[:-len(self.BRAND_EXT)])
         else:
-            raise ValueError('Invalid argument')
+            raise ValueError('Invalid argument at the time of saving data')
 
     def load_data(self, full_path):
         if not os.access(full_path, os.R_OK):

