@@ -1,2 +1,13 @@
-# ransomware
-Very simple ransomware using symmetric encription AES_CBC256. Academic purpose only.
+# Ransomware developement - The Moonfall Project (TFG)
+
+Very simple ransomware for windows. Academic purposes only.
+
+### Requirements 📋
+
+## Executing the code once ⚙️
+`python moonfall.py`
+
+Once executed the script will do:
+#### 1. Encryption will start
+#### 2. Ransom note is displayed
+#### 3. Introduce the key generated
