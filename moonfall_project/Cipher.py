@@ -15,9 +15,10 @@ class Cipher(Utils.Utils):
         self.fernet = Fernet(self.key)
         
         if action == 'encrypt':
+            msg = str.encode('This is a test file that may be hidden')
+            enc_msg = self.fernet.encrypt(msg)
             with open('test.txt', 'wb') as test_file:
-                test_file.write(str.encode('This is a test file that may be hidden'))
-            
+                test_file.write(enc_msg)
             try:
                 subprocess.check_call(['attrib', '+h', 'test.txt'])
             except:
@@ -57,9 +58,13 @@ class Cipher(Utils.Utils):
     def correct_key(self, key):
         print('Hey checking the key')
         aux = Fernet(key)
-        subprocess.check_call(['attrib', '-h', 'test.txt']) # comentar en caso de que no haga falta hacerlo visible
+        try:
+            subprocess.check_call(['attrib', '-h', 'test.txt']) # comentar en caso de que no haga falta hacerlo visible
+        except:
+            print('error in -h')
         with open('test.txt', 'rb') as test_file:
             data = test_file.read()
+
         try:
             decrypted = aux.decrypt(data)
             self.key = self.set_key(key)
@@ -86,3 +91,4 @@ class Cipher(Utils.Utils):
             print(pe)
         except IOError as ioe:
             print(ioe)
+
