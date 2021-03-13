@@ -3,7 +3,7 @@ import oschmod
 import platform
 import win32api
 
-class Utils():
+class Utils:
     BRAND_NAME = 'moonfall'
     BRAND_EXT = '.moonfall'
 

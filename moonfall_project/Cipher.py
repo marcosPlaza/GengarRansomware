@@ -1,9 +1,10 @@
 from cryptography.fernet import Fernet
 import subprocess
-import Utils
+from Utils import Utils
+import oschmod
 
 
-class Cipher(Utils.Utils):
+class Cipher(Utils):
     def __init__(self, key=None, action='decrypt'):
         if key is None:
             self.key = Fernet.generate_key()
@@ -15,22 +16,35 @@ class Cipher(Utils.Utils):
         if action == 'encrypt':
             msg = str.encode('This is a test file that may be hidden')
             enc_msg = self.fernet.encrypt(msg)
+            
+            try:
+                subprocess.check_call(['attrib', '-h', 'test.txt'])
+            except:
+                print('test.txt cannot revealed')
+                
             with open('test.txt', 'wb') as test_file:
                 test_file.write(enc_msg)
+                
             try:
                 subprocess.check_call(['attrib', '+h', 'test.txt'])
             except:
                 print('test.txt cannot be hidden')
+
         
     def set_key(self, key):
         self.key = key
         
         
-    def set_fernet(self, key):
-        self.Fernet = Fernet(key)
+    def set_fernet(self, _fernet):
+        self.fernet = _fernet
 
 
     def save_key_as_file(self, hidden=True):
+        try:
+            subprocess.check_call(['attrib', '-h', 'key.key'])
+        except:
+            print('key.key cannot revealed')
+                
         with open('key.key', 'wb') as key_file:
             key_file.write(self.key)
 
@@ -41,12 +55,15 @@ class Cipher(Utils.Utils):
                 print('key.key cannot be hidden')
 
 
-    # TODO falta comprobar que deba ponerse en visible antes
     def load_key_from_file(self):
+        try:
+            subprocess.check_call(['attrib', '-h', 'key.key'])
+        except:
+            print('error in -h')
+            
         return open("key.key", "rb").read()
 
     
-    # TODO aqui pone test.txt a visible antes. Falta comprobar que deba ponerse en visible antes
     """
     @resumen: Devuelve true si la clave que se pasa por argumento puede desencriptar el archivo oculto. test.txt es de gran importancia no puede borrarse asi como asi
     Tambien establece la clave o key una vez se ha comprobado que es la correcta
@@ -63,7 +80,8 @@ class Cipher(Utils.Utils):
 
         try:
             decrypted = aux.decrypt(data)
-            self.key = self.set_key(key)
+            self.set_key(key)
+            self.set_fernet(aux)
             return True
         except Exception as e:
             print(e)
@@ -87,4 +105,7 @@ class Cipher(Utils.Utils):
             print(pe)
         except IOError as ioe:
             print(ioe)
+        except Exception as e:
+            print('Something on the encryption failed')
+            print(e)
 

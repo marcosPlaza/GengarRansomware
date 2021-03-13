@@ -19,9 +19,6 @@ if __name__ == '__main__':
             key = values[0]
             
             if cipher.correct_key(key):
-                cipher.set_key(key)
-                cipher.set_fernet(key)
-                
                 local_drives = cipher.get_local_drives()
 
                 for ld in local_drives:
