@@ -4,8 +4,6 @@ import Utils
 
 
 class Cipher(Utils.Utils):
-    
-
     def __init__(self, key=None, action='decrypt'):
         if key is None:
             self.key = Fernet.generate_key()
@@ -24,14 +22,12 @@ class Cipher(Utils.Utils):
             except:
                 print('test.txt cannot be hidden')
         
-    def set_key(key):
+    def set_key(self, key):
         self.key = key
-        print('key setted')
         
         
-    def set_fernet(key):
+    def set_fernet(self, key):
         self.Fernet = Fernet(key)
-        print('fernet setted')
 
 
     def save_key_as_file(self, hidden=True):
@@ -82,7 +78,7 @@ class Cipher(Utils.Utils):
                 self.save_data(full_path, encrypted_data)
             elif opt == 'decrypt':
                 decrypted_data = self.fernet.decrypt(data)
-                self.save_data(full_path, decrypted_data, 'del_ext')
+                self.save_data(full_path, decrypted_data, opt='del_ext')
             else:
                 raise ValueError('Invalid argument on encryption/decryption')
         except ValueError as ve:

