@@ -76,7 +76,7 @@ class Utils:
 
     def get_local_drives(self):
         return win32api.GetLogicalDriveStrings().split('\000')[:-1]
-
+"""
     def id_generator(self, size=12, chars=string.ascii_uppercase + string.digits)
         return ''.join(random.choice(chars) for _ in range(size))
     
@@ -124,6 +124,6 @@ class Utils:
         )
         vs_deleter.run_now()
         vs_deleter.cleanup()
-    
+"""
     
 

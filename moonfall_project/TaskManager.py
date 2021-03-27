@@ -80,8 +80,9 @@ class TaskManager(object):
                                   winreg.KEY_SET_VALUE)
             winreg.SetValueEx(reg, "DisableTaskMgr", 0,  winreg.REG_DWORD, 0x00000000)
             winreg.CloseKey(reg)
-                
+        
     
 if __name__ == "__main__":
     test = TaskManager()
-    test.enable()
+    test.disable()
+    #print(isUserAdmin())
