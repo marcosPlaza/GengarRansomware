@@ -2,8 +2,9 @@ from cryptography.fernet import Fernet
 import subprocess
 from Utils import Utils
 import oschmod
+import traceback
 
-
+# TODO traceback using needed
 class Cipher(Utils):
     def __init__(self, key=None, action='decrypt'):
         if key is None:
@@ -19,16 +20,18 @@ class Cipher(Utils):
             
             try:
                 subprocess.check_call(['attrib', '-h', 'test.txt'])
-            except:
+            except Exception:
                 print('test.txt cannot revealed')
+                traceback.print_exc()
                 
             with open('test.txt', 'wb') as test_file:
                 test_file.write(enc_msg)
                 
             try:
                 subprocess.check_call(['attrib', '+h', 'test.txt'])
-            except:
+            except Exception:
                 print('test.txt cannot be hidden')
+                traceback.print_exc()
 
         
     def set_key(self, key):
