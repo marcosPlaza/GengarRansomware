@@ -84,5 +84,5 @@ class TaskManager(object):
     
 if __name__ == "__main__":
     test = TaskManager()
-    test.disable()
+    test.enable()
     #print(isUserAdmin())
