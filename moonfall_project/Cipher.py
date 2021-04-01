@@ -5,6 +5,7 @@ import oschmod
 import traceback
 
 # TODO traceback using needed
+# TODO test in different size and type of files
 class Cipher(Utils):
     def __init__(self, key=None, action='decrypt'):
         if key is None:

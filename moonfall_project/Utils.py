@@ -7,6 +7,7 @@ import ctypes
 import winreg
 import time
 
+
 class Utils:
     """
         Class with a wide variety of useful functionalities as well as other variables.
@@ -203,6 +204,7 @@ class Utils:
 
     """
     Return false if we are running on a virtualized environment
+    TODO Tested and not recognize VM Env
     """
     def pass_vm_check(self):
         for i in range(10):

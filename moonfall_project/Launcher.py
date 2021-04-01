@@ -21,7 +21,7 @@ class Launcher:
 if __name__ == "__main__":
     launcher = Launcher()
     try:
-        launcher.run_exe_as_admin(argv="TaskManager.py", debug=True)
+        launcher.run_exe_as_admin(argv="VirtualEnvironmentDetector.py", debug=True)
     except Exception as e:
         print(e)
         traceback.print_exc()
