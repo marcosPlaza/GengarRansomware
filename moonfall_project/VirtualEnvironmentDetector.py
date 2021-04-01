@@ -2,6 +2,7 @@ import winreg
 
 """
 Check here - https://resources.infosecinstitute.com/topic/malware-anti-analysis-techniques-ways-bypass/
+https://www.goggleheadedhacker.com/blog/post/23
 Techniques
 Check registry entry
 Check if registry exists
