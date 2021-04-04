@@ -22,7 +22,7 @@ class VirtualEnvironmentDetector:
     LOCATION_8 = "SOFTWARE\\VMware, Inc.\\VMware Tools" # If registry exists
     LOCATION_12 = "HARDWARE\\ACPI\\FADT\\VBOX__" # Check if reg key exists
 
-    re_1 = "^([0-9A-Fa-f]){60,60}$" # to check 60 random hex values
+    re_1 = "^([0-9A-Fa-f]){60,60}$" # to check 60 random hex values  # NOT USED YET
     GENERAL_FILES = ["c:\\take_screenshot.ps1", "c:\\loaddll.exe", "c:\\email.doc", "c:\\email.htm", "c:\\123\\email.doc",
      "c:\\123\\email.docx", "c:\\a\\foobar.bmp", "c:\\a\\foobar.doc", "c:\\a\\foobar.gif", "c:\\symbols\\aagmmc.pdb"]
 
@@ -41,25 +41,54 @@ class VirtualEnvironmentDetector:
 
     GENERAL_DIRS = ["c:\\analysis", "%PROGRAMFILES%\\oracle\\virtualbox guest additions\\", "%PROGRAMFILES%\\VMware\\"]
 
-    OTHER_REGEX = [ "c\:\\\\sample\.exe$", "c\:\\\\InsideTm\\\\.*"]
+    OTHER_REGEX = ["c\:\\\\sample\.exe$", "c\:\\\\InsideTm\\\\.*"] # NOT USED YET - REGEX
 
-    def __init__(self, enable_detection = True):
-        if enable_detection:
+    GENERAL_REGS = ["HKLM\\Software\\Classes\\Folder\\shell\\sandbox"] 
+
+    HYPER_V_REGS = ["HKLM\\SOFTWARE\\Microsoft\\Hyper-V", "HKLM\\SOFTWARE\\Microsoft\\VirtualMachine", "HKLM\\SOFTWARE\\Microsoft\\Virtual Machine\\Guest\\Parameters", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmicheartbeat",
+    "HKLM\\SYSTEM\\ControlSet001\\Services\\vmicvss", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmicshutdown", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmicshutdown", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmicexchange"]
+
+    PARALLELS_REGS = ["HKLM\\SYSTEM\\CurrentControlSet\\Enum\\PCI\\VEN_1AB8*"] # "VEN_XXXX&DEV_YYYY&SUBSYS_ZZZZ&REV_WW" - REGEX
+
+    SANDBOXIE_REGS = ["HKLM\\SYSTEM\\CurrentControlSet\\Services\\SbieDrv", "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Sandboxie"]
+
+    VIRTUALBOX_REGEX = "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\PCI\\VEN_80EE*" # REGEX
+
+    VIRTUALBOX_REGS =["HKLM\\HARDWARE\\ACPI\\DSDT\\VBOX__", "HKLM\\HARDWARE\\ACPI\\FADT\\VBOX__", "HKLM\\HARDWARE\\ACPI\\RSDT\\VBOX__", "HKLM\\SOFTWARE\\Oracle\\VirtualBox Guest Additions",
+    "HKLM\\SYSTEM\\ControlSet001\\Services\\VBoxGuest", "HKLM\\SYSTEM\\ControlSet001\\Services\\VBoxMouse", "HKLM\\SYSTEM\\ControlSet001\\Services\\VBoxService", "HKLM\\SYSTEM\\ControlSet001\\Services\\VBoxSF", "HKLM\\SYSTEM\\ControlSet001\\Services\\VBoxVideo"]
+
+    VIRTUALPC_REGEX = "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\PCI\\VEN_5333*" # REGEX
+    VIRTUALPC_REGS = ["HKLM\\SYSTEM\\ControlSet001\\Services\\vpcbus", "HKLM\\SYSTEM\\ControlSet001\\Services\\vpc-s3", "HKLM\\SYSTEM\\ControlSet001\\Services\\vpcuhub", "HKLM\\SYSTEM\\ControlSet001\\Services\\msvmmouf"]
+
+    VMWARE_REGS = ["HKLM\\SYSTEM\\CurrentControlSet\\Enum\\PCI\\VEN_15AD*", "HKCU\\SOFTWARE\\VMware, Inc.\\VMware Tools", "HKLM\\SOFTWARE\\VMware, Inc.\\VMware Tools", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmdebug", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmmouse",
+     "HKLM\\SYSTEM\\ControlSet001\\Services\\VMTools", "HKLM\\SYSTEM\\ControlSet001\\Services\\VMMEMCTL", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmware", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmci", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmx86", "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\IDE\\CdRomNECVMWar_VMware_IDE_CD*", 
+     "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\IDE\\CdRomNECVMWar_VMware_SATA_CD*", "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\IDE\\DiskVMware_Virtual_IDE_Hard_Drive*", "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\IDE\\DiskVMware_Virtual_SATA_Hard_Drive*"]
+
+    WINE_REGS = ["HKCU\\SOFTWARE\\Wine", "HKLM\\SOFTWARE\\Wine"]
+
+    XEN_REGS = ["HKLM\\HARDWARE\\ACPI\\DSDT\\xen", "HKLM\\HARDWARE\\ACPI\\FADT\\xen", "HKLM\\HARDWARE\\ACPI\\RSDT\\xen", "HKLM\\SYSTEM\\ControlSet001\\Services\\xenevtchn", "HKLM\\SYSTEM\\ControlSet001\\Services\\xennet", "HKLM\\SYSTEM\\ControlSet001\\Services\\xennet6", "HKLM\\SYSTEM\\ControlSet001\\Services\\xensvc", "HKLM\\SYSTEM\\ControlSet001\\Services\\xenvdb"]
+
+    SUBKEY_REGEX = "VEN_XXXX&DEV_YYYY&SUBSYS_ZZZZ&REV_WW"
+
+
+    def __init__(self, file_detection = True, registry_detection = True):
+        if file_detection:
             #full file detection
-            self.general = self.file_or_dir_detection(self.GENERAL_FILES)
-            self.parallels = self.file_or_dir_detection(self.PARALLELS_FILES)
-            self.virtualbox = self.file_or_dir_detection(self.VIRTUALBOX_FILES)
-            self.virtualpc = self.file_or_dir_detection(self.VIRTUALPC_FILES)
-            self.vmware = self.file_or_dir_detection(self.VMWARE_FILES)
-        else:
-            print("DEBUG MODE ENABLED")
+            self.general_files = self.file_or_dir_detection(self.GENERAL_FILES)
+            self.parallels_files = self.file_or_dir_detection(self.PARALLELS_FILES)
+            self.virtualbox_files = self.file_or_dir_detection(self.VIRTUALBOX_FILES)
+            self.virtualpc_files = self.file_or_dir_detection(self.VIRTUALPC_FILES)
+            self.vmware_files = self.file_or_dir_detection(self.VMWARE_FILES)
+        
+        if registry_detection:
+            pass
 
     def print_check_results(self):
-        print("General ", self.general)
-        print("Parallels ", self.parallels)
-        print("Virtual Box ", self.virtualbox)
-        print("Virtual PC ", self.virtualpc)
-        print("VMWare ", self.vmware)
+        print("General ", self.general_files)
+        print("Parallels ", self.parallels_files)
+        print("Virtual Box ", self.virtualbox_files)
+        print("Virtual PC ", self.virtualpc_files)
+        print("VMWare ", self.vmware_files)
 
     def file_or_dir_detection(self, names_list):
         for fod in names_list:
