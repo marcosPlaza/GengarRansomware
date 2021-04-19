@@ -12,16 +12,7 @@ Check if registry exists
 Check if some file exists
 """
 class VirtualEnvironmentDetector:
-    LOCATION_1 = "SYSTEM\\ControlSet001\\Control\\Class\\{4d36e965-e325-11ce-bfc1-08002be10318}\\0000\\DriverDesc"  # If registry exists
-    LOCATION_2 = "SYSTEM\\ControlSet001\\Control\\Class\\{4d36e965-e325-11ce-bfc1-08002be10318}\\0000\\ProviderName"  # If registry exists
-    LOCATION_3 = "HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port 0\\Scsi Bus 0\\Target Id 0\\Logical Unit Id 0\\Identifier" # Find QEMU or VBOX or VMWare
-    LOCATION_4 = "HARDWARE\\Description\\System\\SystemBiosVersion" # Find QEMU or VBOX
-    LOCATION_5 = "HARDWARE\\Description\\System\\VideoBiosVersion" # Find VIRTUALBOX
-    LOCATION_6 = "SOFTWARE\\Oracle\\VirtualBox Guest Additions" # If registry exists
-    LOCATION_7 = "WINDOWS\\system32\\drivers\\VBoxMouse.sys" # Check if file driver exists
-    LOCATION_8 = "SOFTWARE\\VMware, Inc.\\VMware Tools" # If registry exists
-    LOCATION_12 = "HARDWARE\\ACPI\\FADT\\VBOX__" # Check if reg key exists
-
+    # PHASE 1 - CHECK IF FILES/DIRECTORIES EXISTS
     re_1 = "^([0-9A-Fa-f]){60,60}$" # to check 60 random hex values  # NOT USED YET
     GENERAL_FILES = ["c:\\take_screenshot.ps1", "c:\\loaddll.exe", "c:\\email.doc", "c:\\email.htm", "c:\\123\\email.doc",
      "c:\\123\\email.docx", "c:\\a\\foobar.bmp", "c:\\a\\foobar.doc", "c:\\a\\foobar.gif", "c:\\symbols\\aagmmc.pdb"]
@@ -43,6 +34,7 @@ class VirtualEnvironmentDetector:
 
     OTHER_REGEX = ["c\:\\\\sample\.exe$", "c\:\\\\InsideTm\\\\.*"] # NOT USED YET - REGEX
 
+    # PHASE 2 - CHECK IF REGISTRY ENTRIES EXISTS
     GENERAL_REGS = ["HKLM\\Software\\Classes\\Folder\\shell\\sandbox"] 
 
     HYPER_V_REGS = ["HKLM\\SOFTWARE\\Microsoft\\Hyper-V", "HKLM\\SOFTWARE\\Microsoft\\VirtualMachine", "HKLM\\SOFTWARE\\Microsoft\\Virtual Machine\\Guest\\Parameters", "HKLM\\SYSTEM\\ControlSet001\\Services\\vmicheartbeat",
@@ -69,6 +61,9 @@ class VirtualEnvironmentDetector:
     XEN_REGS = ["HKLM\\HARDWARE\\ACPI\\DSDT\\xen", "HKLM\\HARDWARE\\ACPI\\FADT\\xen", "HKLM\\HARDWARE\\ACPI\\RSDT\\xen", "HKLM\\SYSTEM\\ControlSet001\\Services\\xenevtchn", "HKLM\\SYSTEM\\ControlSet001\\Services\\xennet", "HKLM\\SYSTEM\\ControlSet001\\Services\\xennet6", "HKLM\\SYSTEM\\ControlSet001\\Services\\xensvc", "HKLM\\SYSTEM\\ControlSet001\\Services\\xenvdb"]
 
     SUBKEY_REGEX = "VEN_XXXX&DEV_YYYY&SUBSYS_ZZZZ&REV_WW"
+
+    # PHASE 3 - CHECK IF REGISTRY ENTRIES RETURN THE EXPECTED VALUE
+    # INSERT HERE
 
 
     def __init__(self, file_detection = True, registry_detection = True):
