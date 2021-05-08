@@ -3,6 +3,8 @@ import os
 import re
 import time
 
+# TODO Not tested
+
 """
 Check here - https://resources.infosecinstitute.com/topic/malware-anti-analysis-techniques-ways-bypass/
 https://www.goggleheadedhacker.com/blog/post/23
@@ -11,6 +13,7 @@ Check registry entry
 Check if registry exists
 Check if some file exists
 """
+# TODO be careful with projects like this pls: https://github.com/fr0gger/RocProtect-V1
 class VirtualEnvironmentDetector:
     # PHASE 1 - CHECK IF FILES/DIRECTORIES EXISTS
     re_1 = "^([0-9A-Fa-f]){60,60}$" # to check 60 random hex values  # NOT USED YET
@@ -65,7 +68,7 @@ class VirtualEnvironmentDetector:
     # PHASE 3 - CHECK IF REGISTRY ENTRIES RETURN THE EXPECTED VALUE
     # INSERT HERE
 
-
+    # PHASE 4 - CHECK NETWORK ADDRESSES
     def __init__(self, file_detection = True, registry_detection = True):
         if file_detection:
             #full file detection
@@ -75,36 +78,59 @@ class VirtualEnvironmentDetector:
             self.virtualpc_files = self.file_or_dir_detection(self.VIRTUALPC_FILES)
             self.vmware_files = self.file_or_dir_detection(self.VMWARE_FILES)
         
+        # Not tested
         if registry_detection:
-            pass
+            self.general_regs = self.check_registries_exists(self.GENERAL_REGS)
+            self.hyperv_regs = self.check_registries_exists(self.HYPER_V_REGS)
+            self.parallels_regs = self.check_registries_exists(self.PARALLELS_REGS)
+            self.sandboxie_regs = self.check_registries_exists(self.SANDBOXIE_REGS)
+            self.virtualbox_regs = self.check_registries_exists(self.VIRTUALBOX_REGS)
+            self.virtualpc_regs = self.check_registries_exists(self.VIRTUALPC_REGS)
+            self.vmware_regs = self.check_registries_exists(self.VMWARE_REGS)
+            self.wine_regs = self.check_registries_exists(self.WINE_REGS)
+            self.xen_regs = self.check_registries_exists(self.XEN_REGS)
 
     def print_check_results(self):
-        print("General ", self.general_files)
-        print("Parallels ", self.parallels_files)
-        print("Virtual Box ", self.virtualbox_files)
-        print("Virtual PC ", self.virtualpc_files)
-        print("VMWare ", self.vmware_files)
+        print("General files", self.general_files)
+        print("Parallels files", self.parallels_files)
+        print("Virtual Box files", self.virtualbox_files)
+        print("Virtual PC files", self.virtualpc_files)
+        print("VMWare files", self.vmware_files)
+
+        print("General regs", self.general_regs)
+        print("Hyper V regs", self.hyperv_regs)
+        print("Parallels regs", self.parallels_regs)
+        print("Sandboxie regs", self.sandboxie_regs)
+        print("Virtual Box regs", self.virtualbox_regs)
+        print("Virtual PC regs", self.virtualpc_regs)
+        print("VMWare regs", self.vmware_regs)
+        print("Wine regs", self.wine_regs)
+        print("Xen regs", self.xen_regs)
 
     def file_or_dir_detection(self, names_list):
         for fod in names_list:
             if os.path.exists(fod): return True
         return False
         
-    def check_registries_exists(self, reg_path):
+    def check_registries_exists(self, reg_path, debug=True):
         # Try to read the key
         try:
             reg = winreg.OpenKeyEx(winreg.HKEY_LOCAL_MACHINE, reg_path)
-            print(reg)
+            if debug: print(reg)
             winreg.CloseKey(reg)
             return True
         except FileNotFoundError as fnfe:
+            
             return False
 
     def check_registry_value(self, reg_path):
         pass
         
-
-    # IDT address
+    # NOT TESTED
+    """ Returns: True if running in a Docker container """
+    def in_docker(self):
+        with open('/proc/1/cgroup', 'rt') as ifh:
+            return 'docker' in ifh.read()
     
 if __name__ == "__main__":
     start_time = time.time()
