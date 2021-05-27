@@ -2,6 +2,7 @@ import winreg
 import os
 import re
 import time
+import multiprocessing
 
 # TODO Not tested
 
@@ -14,6 +15,7 @@ Check if registry exists
 Check if some file exists
 """
 # TODO be careful with projects like this pls: https://github.com/fr0gger/RocProtect-V1
+# Asignar una ponderación para cada una de las pruebas
 class VirtualEnvironmentDetector:
     # PHASE 1 - CHECK IF FILES/DIRECTORIES EXISTS
     re_1 = "^([0-9A-Fa-f]){60,60}$" # to check 60 random hex values  # NOT USED YET
@@ -131,9 +133,40 @@ class VirtualEnvironmentDetector:
     def in_docker(self):
         with open('/proc/1/cgroup', 'rt') as ifh:
             return 'docker' in ifh.read()
+
+    # Cual es el determinante de si es un entorno virtualizado para el numero de cpus?
+    def check_num_processors():
+        try:
+            return multiprocessing.cpu_count()
+        except:
+            pass
+
+    def get_ram_size():
+        try:
+            mem_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')
+            mem_gib = mem_bytes/(1024.**3)
+            return mem_gib
+        except:
+            pass
+
+    def get_screen_res():
+        import subprocess
+
+        cmd = ['xrandr']
+        cmd2 = ['grep', '*']
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
+        p.stdout.close()
+
+        resolution_string, junk = p2.communicate()
+        resolution = resolution_string.split()[0]
+        width, height = resolution.split('x')
+
+        return (width, height)
     
 if __name__ == "__main__":
     start_time = time.time()
     ved = VirtualEnvironmentDetector()
     ved.print_check_results()
     print("--- %s seconds ---" % (time.time() - start_time))
+    print(ved.check_num_processors) # prints 12 for amd ryzen 5 5600 X
