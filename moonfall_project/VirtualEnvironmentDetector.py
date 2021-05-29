@@ -1,8 +1,11 @@
 import winreg
+import win32api
 import os
 import re
 import time
-import multiprocessing
+import uuid
+import traceback
+import psutil
 
 # TODO Not tested
 
@@ -91,6 +94,7 @@ class VirtualEnvironmentDetector:
             self.vmware_regs = self.check_registries_exists(self.VMWARE_REGS)
             self.wine_regs = self.check_registries_exists(self.WINE_REGS)
             self.xen_regs = self.check_registries_exists(self.XEN_REGS)
+        
 
     def print_check_results(self):
         print("General files", self.general_files)
@@ -113,8 +117,13 @@ class VirtualEnvironmentDetector:
         for fod in names_list:
             if os.path.exists(fod): return True
         return False
-        
-    def check_registries_exists(self, reg_path, debug=True):
+    
+    def check_registries_exists(self, regs_list):
+        for reg in regs_list:
+            if self.check_registry_exists(reg, debug=False): return True
+        return False
+
+    def check_registry_exists(self, reg_path, debug=True):
         # Try to read the key
         try:
             reg = winreg.OpenKeyEx(winreg.HKEY_LOCAL_MACHINE, reg_path)
@@ -135,38 +144,42 @@ class VirtualEnvironmentDetector:
             return 'docker' in ifh.read()
 
     # Cual es el determinante de si es un entorno virtualizado para el numero de cpus?
-    def check_num_processors():
+    def check_num_processors(self):
         try:
-            return multiprocessing.cpu_count()
+            return psutil.cpu_count()
         except:
             pass
 
-    def get_ram_size():
+    def get_ram_size(self):
         try:
-            mem_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')
-            mem_gib = mem_bytes/(1024.**3)
-            return mem_gib
+            bytes = psutil.virtual_memory()
+            return bytes.total / 1e9
         except:
-            pass
+            traceback.print_exc()
 
-    def get_screen_res():
-        import subprocess
+    def get_screen_res(self):
+        try:
+            return (win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1))
+        except:
+            traceback.print_exc()
 
-        cmd = ['xrandr']
-        cmd2 = ['grep', '*']
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
-        p.stdout.close()
-
-        resolution_string, junk = p2.communicate()
-        resolution = resolution_string.split()[0]
-        width, height = resolution.split('x')
-
-        return (width, height)
+    def get_harddrive_size(self, free_space=False):
+        try:
+            hdd = psutil.disk_usage('/')
+            if free_space:
+                return hdd.free / 1e9
+            return hdd.total / 1e9
+        except:
+            traceback.print_exc()
+    
+    
     
 if __name__ == "__main__":
     start_time = time.time()
     ved = VirtualEnvironmentDetector()
     ved.print_check_results()
     print("--- %s seconds ---" % (time.time() - start_time))
-    print(ved.check_num_processors) # prints 12 for amd ryzen 5 5600 X
+    print(ved.check_num_processors()) # prints 12 for amd ryzen 5 5600 X
+    print(ved.get_ram_size())
+    print(ved.get_screen_res())
+    print(ved.get_harddrive_size())

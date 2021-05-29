@@ -1,0 +1,16 @@
+https://www.forcepoint.com/blog/x-labs/locky-returned-new-anti-vm-trick
+https://shasaurabh.blogspot.com/2017/07/virtual-machine-detection-techniques.html
+https://resources.infosecinstitute.com/topic/malware-anti-analysis-techniques-ways-bypass/
+https://www.aldeid.com/wiki/VMXh-Magic-Value#C_source
+https://kb.vmware.com/s/article/1009458
+https://rayanfam.com/topics/defeating-malware-anti-vm-techniques-cpuid-based-instructions/
+https://www.cyberbit.com/blog/endpoint-security/anti-vm-and-anti-sandbox-explained/
+https://www.goggleheadedhacker.com/blog/post/21
+https://www.goggleheadedhacker.com/blog/post/23
+https://escudodigital.com/ciberseguridad/trickbot-releva-emotet-top-malware-febrero-2021/
+https://evasions.checkpoint.com/
+
+https://www.welivesecurity.com/la-es/2014/08/20/como-realizar-analisis-malware-evita-virtualizacion/
+https://www.welivesecurity.com/la-es/2014/08/04/como-construir-un-entorno-de-pruebas-eficiente/
+
+DETECTAR WINE 

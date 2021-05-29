@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pyngrok import ngrok, conf
 import sqlite3
 import json
+from os import curdir, sep
 
 conf.get_default().auth_token = "1sZD68OeJd5hYhK5AXcZqadcfhH_78CE8wUxdYd14BULf6CJd"
 
@@ -62,7 +63,14 @@ class MoonfallServer(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self._set_response()
-        self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
+
+        if self.path == "/example/suma.exe":
+            with open(self.path[1:], 'rb') as file:
+                self.wfile.write(file.read())
+
+        else:
+            self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
+
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
@@ -91,7 +99,7 @@ def run(server_class=HTTPServer, handler_class=MoonfallServer, address="localhos
     try:
         server_address = (address, port)
         httpd = server_class(server_address, handler_class)
-        # print("Server started http://%s:%s" % (address, port))
+        #print("Server started http://%s:%s" % (address, port))
 
         url = ngrok.connect(port)
         print("Server started on {}".format(url))
