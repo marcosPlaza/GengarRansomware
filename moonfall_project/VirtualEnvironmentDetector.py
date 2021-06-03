@@ -183,3 +183,4 @@ if __name__ == "__main__":
     print(ved.get_ram_size())
     print(ved.get_screen_res())
     print(ved.get_harddrive_size())
+    input("ENTER to exit.")
