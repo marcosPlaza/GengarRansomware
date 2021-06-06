@@ -192,4 +192,5 @@ if __name__ == "__main__":
     print(ved.get_ram_size())
     print(ved.get_screen_res())
     print(ved.get_harddrive_size())
+    print(ved.check_registry_by_value("HKLM\HARDWARE\Description\System\SystemBiosDate", "06/23/99"))
     input("ENTER to exit.")
