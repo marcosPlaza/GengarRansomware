@@ -134,8 +134,17 @@ class VirtualEnvironmentDetector:
             
             return False
 
-    def check_registry_value(self, reg_path):
-        pass
+    def check_registry_by_value(self, reg_path, value, debug=True):
+        # Try to read the key
+        try:
+            reg = winreg.OpenKeyEx(winreg.HKEY_LOCAL_MACHINE, reg_path)
+            if debug: print(reg)
+            winreg.CloseKey(reg)
+            if value in str(reg): return True
+            return False
+        except FileNotFoundError as fnfe:
+            
+            return False
         
     # NOT TESTED
     """ Returns: True if running in a Docker container """
