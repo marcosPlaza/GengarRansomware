@@ -95,7 +95,7 @@ class VirtualEnvironmentDetector:
         # CHECK OS FEATURES; IF NUMBER OF PROCESSORS IS LOWER THAN 2 OR RAM SIZE IS LOW THEN CANCEL
         if os_features:
             self.num_processors = self.check_num_processors() < 2
-            self.ram_size = self.get_ram_size() < 4096
+            self.ram_size = self.get_ram_size() < 4
             # NOT CHECKING SCREEN RESOLUTION
 
         # CHECK IF THE PROGRAMM IS RUNNING IN DOCKER CONTAINER
@@ -110,9 +110,9 @@ class VirtualEnvironmentDetector:
 
         # CHECK IF WE ARE RUNNING ON CUCKOO SANDBOX
         if dodelay:
-            self.activity_stopped = self.delay_anti_cuckoo(0)
+            self.activity_stopped = self.delay_anti_cuckoo(delay)
 
-    def print_check_results(self, file_detection = True, registry_detection = True, registry_string=True, os_features=True, check_docker=True, check_mac_address=True, dodelay=True, delay=5*60):
+    def print_check_results(self):
         print("General files -->", self.general_files)
         print("Parallels files -->", self.parallels_files)
         print("Virtual Box files -->", self.virtualbox_files)
@@ -274,6 +274,9 @@ class VirtualEnvironmentDetector:
             if time.time() - start_time < delay:
                 return True
 
+    def neo_takes_blue_pill(self, tolerance=0):
+        return sum([1 for x in self.__dict__.values() if x]) > tolerance
+
     
     
 if __name__ == "__main__":
@@ -281,4 +284,7 @@ if __name__ == "__main__":
     ved = VirtualEnvironmentDetector()
     ved.print_check_results()
     print("--- %s seconds ---" % (time.time() - start_time))
+    print(ved.num_processors)
+    print(ved.get_ram_size())
+    print(ved.neo_takes_blue_pill())
     input("ENTER to exit.")

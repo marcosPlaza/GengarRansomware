@@ -9,10 +9,10 @@ class DisableUSBPorts(object):
     def __init__(self):
         pass
 
-    def disable_ports(self, port_id=None):
+    def enable_ports(self, port_id=None):
         pass
 
-    def enable_ports(self, port_id=None):
+    def disable_ports(self, port_id=None):
         pass
 
 if __name__ == "__main__":

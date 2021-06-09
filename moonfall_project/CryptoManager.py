@@ -1,6 +1,6 @@
 from cryptography.fernet import Fernet
 import subprocess
-from .Utils import Utils
+import Utils
 import oschmod
 import traceback
 

@@ -1,5 +1,5 @@
-from .RansomNote import RansomNote, purple_pop_up
-from .CryptoManager import CryptoManager
+import RansomNote
+import CryptoManager
 import os, sys
 
 if __name__ == '__main__':
