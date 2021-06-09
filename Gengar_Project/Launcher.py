@@ -4,7 +4,7 @@ import os
 import traceback
 
 CMD_PATH = "C:\\Windows\\System32\\cmd.exe"
-EXEC_PATH = "C:\\Users\\marco\\OneDrive\\Escritorio\\ransomware\\moonfall_project\\dist\\test.exe"
+EXEC_PATH = "C:\\Users\\marco\\OneDrive\\Escritorio\\ransomware\\Gengar_Project\\dist\\test.exe"
 
 class Launcher:
     def run_exe_as_admin(self, executable=None, argv=None, debug=False):

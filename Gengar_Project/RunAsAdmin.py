@@ -1,7 +1,8 @@
 # class adapted from https://gist.github.com/GaryLee/d1cf2089c3a515691919
 import sys
 import ctypes
-
+import os
+import traceback
 
 class RunAsAdmin():
     # returning true if script is executing as admin

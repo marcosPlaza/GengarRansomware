@@ -1,6 +1,6 @@
 from re import S
-from .CryptoManager import CryptoManager
-from .VirtualEnvironmentDetector import VirtualEnvironmentDetector
+from CryptoManager import CryptoManager
+from VirtualEnvironmentDetector import VirtualEnvironmentDetector
 import os
 import sys
 
