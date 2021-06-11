@@ -4,7 +4,6 @@ from Utils import Utils
 import oschmod
 import traceback
 
-# TODO traceback using needed
 # TODO test in different size and type of files
 class CryptoManager(Utils):
     def __init__(self, key=None, action='decrypt'):

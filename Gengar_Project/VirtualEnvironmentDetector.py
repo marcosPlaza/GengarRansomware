@@ -148,6 +148,9 @@ class VirtualEnvironmentDetector:
         print("Xen MAC -->", self.xen_mac)
 
         print("Activity has been stopped? -->", self.activity_stopped)
+    
+    def is_windows(self):
+        return os.name == 'nt'
 
     def check_registry_exists(self, reg_path):
         reg_str = reg_path[0:4]

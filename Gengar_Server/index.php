@@ -3,7 +3,7 @@
 
 <!--
     go to root folder
-    php -s localhost:8000
+    php -S localhost:8000
 -->
 
 <head>

