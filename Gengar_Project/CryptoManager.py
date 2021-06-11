@@ -20,7 +20,7 @@ class CryptoManager(Utils):
             
             try:
                 subprocess.check_call(['attrib', '-h', 'test.txt'])
-            except Exception:
+            except:
                 print('test.txt cannot revealed')
                 traceback.print_exc()
                 
@@ -29,7 +29,7 @@ class CryptoManager(Utils):
                 
             try:
                 subprocess.check_call(['attrib', '+h', 'test.txt'])
-            except Exception:
+            except:
                 print('test.txt cannot be hidden')
                 traceback.print_exc()
 
@@ -72,7 +72,6 @@ class CryptoManager(Utils):
     Tambien establece la clave o key una vez se ha comprobado que es la correcta
     """
     def correct_key(self, key):
-        print('Hey checking the key')
         aux = Fernet(key)
         try:
             subprocess.check_call(['attrib', '-h', 'test.txt']) # comentar en caso de que no haga falta hacerlo visible
@@ -86,8 +85,7 @@ class CryptoManager(Utils):
             self.set_key(key)
             self.set_fernet(aux)
             return True
-        except Exception as e:
-            print(e)
+        except:
             return False
 
             

