@@ -67,6 +67,7 @@ class Utils:
                   '.ott', '.odt', '.pem', '.p12', '.csr', '.crt', '.key', '.pfx', '.der']
 
 
+    MAX_SIZE_FILE = 1000000000 # Maximum size of files must be 1 GB, otherwise file split is needed
     DISABLE_TASKMANAGER_KEY_LOCATION = "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
 
 

