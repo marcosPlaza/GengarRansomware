@@ -94,7 +94,6 @@ class CryptoManager(Utils):
     def symmetric_encrypt_or_decrypt(self, full_path, opt='encrypt'):
         try:
             data = self.load_data(full_path)
-            if len(data) > 
             if opt == 'encrypt':
                 encrypted_data = self.fernet.encrypt(data)
                 self.save_data(full_path, encrypted_data)

