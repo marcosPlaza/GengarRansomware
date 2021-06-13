@@ -133,6 +133,7 @@ class Utils:
     def is_windows(self):
         return os.name == 'nt'
 
+
     def get_local_drives(self):
         return win32api.GetLogicalDriveStrings().split('\000')[:-1]
 
