@@ -111,12 +111,14 @@ class Utils:
                 for root, dirs, files in os.walk(ld):
                     for fn in files:
                         full_path = root + os.sep + fn
-                        if os.path.getsize(fn) > self.MAX_SIZE_FILE:
-                            print("splitting...")
-                            dir_name = str(fn) + "_gengar_splitted_file"
-                            os.mkdir(dir_name)
-                            fs.split(file=full_path, split_size=self.MAX_SIZE_FILE, output_dir=dir_name)
-                            os.remove(fn)
+                        ext = self.get_file_extension(full_path)
+                        if ext in self.TARGET_EXT and ext not in self.EXCLUDED_EXT:
+                            if os.path.getsize(fn) > self.MAX_SIZE_FILE:
+                                print("splitting...")
+                                dir_name = str(fn) + "_gengar_splitted_file"
+                                os.mkdir(dir_name)
+                                fs.split(file=full_path, split_size=self.MAX_SIZE_FILE, output_dir=dir_name)
+                                os.remove(fn)
         except:
             traceback.print_exc()
 
