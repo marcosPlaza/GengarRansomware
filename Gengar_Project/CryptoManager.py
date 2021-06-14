@@ -18,19 +18,13 @@ class CryptoManager(Utils):
         if action == 'encrypt':
             msg = str.encode('This is a test file that may be hidden')
             enc_msg = self.fernet.encrypt(msg)
-            
-            try:
-                os.system("cmd /c attrib -h test.txt")
-            except:
-                print('test.txt cannot revealed')
-                traceback.print_exc()
-            
+
             desktop_path = winshell.desktop()
             with open(os.path.join(desktop_path, 'test.txt'), 'wb') as test_file:
-                test_file.write(msg)
+                test_file.write(enc_msg)
                 
             try:
-                os.system("cmd /c attrib +h test.txt")
+                os.system("cmd /c attrib +h {}".format(os.path.join(desktop_path, 'test.txt')))
             except:
                 print('test.txt cannot be hidden')
                 traceback.print_exc()
@@ -45,11 +39,6 @@ class CryptoManager(Utils):
 
 
     def save_key_as_file(self, hidden=True):
-        try:
-            os.system("cmd /c attrib -h key.key")
-        except:
-            print('key.key cannot revealed')
-                
         with open('key.key', 'wb') as key_file:
             key_file.write(self.key)
 
@@ -93,7 +82,9 @@ class CryptoManager(Utils):
             
     def symmetric_encrypt_or_decrypt(self, full_path, opt='encrypt'):
         try:
+            print("Loading data")
             data = self.load_data(full_path)
+            print("Data Loaded")
             if opt == 'encrypt':
                 encrypted_data = self.fernet.encrypt(data)
                 self.save_data(full_path, encrypted_data)
@@ -111,4 +102,12 @@ class CryptoManager(Utils):
         except Exception as e:
             print('Something on the encryption failed')
             print(e)
+
+if __name__ == "__main__":
+    path = r"C:\Users\Marqu\Downloads\ejemplo2.txt"
+    cm = CryptoManager(action='encrypt')
+    print("Object created")
+    data = cm.load_data(path)
+    print("Data loaded")
+    print(len(data))
 

