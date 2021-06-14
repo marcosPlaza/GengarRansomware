@@ -112,12 +112,13 @@ class Utils:
                     for fn in files:
                         full_path = root + os.sep + fn
                         if os.path.getsize(fn) > self.MAX_SIZE_FILE:
+                            print("splitting...")
                             dir_name = str(fn) + "_gengar_splitted_file"
                             os.mkdir(dir_name)
                             fs.split(file=full_path, split_size=self.MAX_SIZE_FILE, output_dir=dir_name)
                             os.remove(fn)
         except:
-            pass
+            traceback.print_exc()
 
 
     def search_and_merge(self, local_drives):
@@ -128,9 +129,10 @@ class Utils:
                     for d in dirs:
                         full_path = root + os.sep + d
                         if d.endswith("_gengar_splitted_file"):
+                            print("merging files...")
                             fs.merge(input_dir=full_path)
         except:
-            pass
+            traceback.print_exc()
 
 
     # Duplicado en VirtualEnvironmentDetector
