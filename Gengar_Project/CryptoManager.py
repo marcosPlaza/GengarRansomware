@@ -20,7 +20,7 @@ class CryptoManager(Utils):
             enc_msg = self.fernet.encrypt(msg)
             
             try:
-                subprocess.check_call(['attrib', '-h', 'test.txt'])
+                os.system("cmd /c attrib -h test.txt")
             except:
                 print('test.txt cannot revealed')
                 traceback.print_exc()
@@ -30,7 +30,7 @@ class CryptoManager(Utils):
                 test_file.write(msg)
                 
             try:
-                subprocess.check_call(['attrib', '+h', 'test.txt'])
+                os.system("cmd /c attrib +h test.txt")
             except:
                 print('test.txt cannot be hidden')
                 traceback.print_exc()
@@ -46,7 +46,7 @@ class CryptoManager(Utils):
 
     def save_key_as_file(self, hidden=True):
         try:
-            subprocess.check_call(['attrib', '-h', 'key.key'])
+            os.system("cmd /c attrib -h key.key")
         except:
             print('key.key cannot revealed')
                 
@@ -55,14 +55,14 @@ class CryptoManager(Utils):
 
         if hidden:
             try:
-                subprocess.check_call(['attrib', '+h', 'key.key'])
+                os.system("cmd /c attrib +h key.key")
             except:
                 print('key.key cannot be hidden')
 
 
     def load_key_from_file(self):
         try:
-            subprocess.check_call(['attrib', '-h', 'key.key'])
+            os.system("cmd /c attrib -h key.key")
         except:
             print('error in -h')
             
@@ -76,7 +76,7 @@ class CryptoManager(Utils):
     def correct_key(self, key):
         aux = Fernet(key)
         try:
-            subprocess.check_call(['attrib', '-h', 'test.txt']) # comentar en caso de que no haga falta hacerlo visible
+            os.system("cmd /c attrib -h test.txt") # comentar en caso de que no haga falta hacerlo visible
         except:
             print('error in -h')
         with open('test.txt', 'rb') as test_file:
