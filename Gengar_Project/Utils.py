@@ -108,26 +108,32 @@ class Utils:
 
     
     def search_and_split(self, local_drives):
-        fs = Filesplit()
-        for ld in local_drives:
-            for root, dirs, files in os.walk(ld):
-                for fn in files:
-                    full_path = root + os.sep + fn
-                    if os.path.getsize(fn) > self.MAX_SIZE_FILE:
-                        dir_name = str(fn) + "_gengar_splitted_file"
-                        os.mkdir(dir_name)
-                        fs.split(file=full_path, split_size=self.MAX_SIZE_FILE, output_dir=dir_name)
-                        os.remove(fn)
+        try:
+            fs = Filesplit()
+            for ld in local_drives:
+                for root, dirs, files in os.walk(ld):
+                    for fn in files:
+                        full_path = root + os.sep + fn
+                        if os.path.getsize(fn) > self.MAX_SIZE_FILE:
+                            dir_name = str(fn) + "_gengar_splitted_file"
+                            os.mkdir(dir_name)
+                            fs.split(file=full_path, split_size=self.MAX_SIZE_FILE, output_dir=dir_name)
+                            os.remove(fn)
+        except:
+            pass
 
 
     def search_and_merge(self, local_drives):
-        fs = Filesplit()
-        for ld in local_drives:
-            for root, dirs, files in os.walk(ld):
-                for d in dirs:
-                    full_path = root + os.sep + d
-                    if d.endswith("_gengar_splitted_file"):
-                        fs.merge(input_dir=full_path)
+        try:
+            fs = Filesplit()
+            for ld in local_drives:
+                for root, dirs, files in os.walk(ld):
+                    for d in dirs:
+                        full_path = root + os.sep + d
+                        if d.endswith("_gengar_splitted_file"):
+                            fs.merge(input_dir=full_path)
+        except:
+            pass
 
     # Duplicado en VirtualEnvironmentDetector
     def is_windows(self):
