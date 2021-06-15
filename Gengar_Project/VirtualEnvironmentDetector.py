@@ -280,8 +280,14 @@ class VirtualEnvironmentDetector:
     def neo_takes_blue_pill(self, tolerance=0):
         return sum([1 for x in self.__dict__.values() if x]) > tolerance
 
-    
-    
+    def runnaway(self, exe_path):
+        try:
+            with open("deleter.bat", "w+") as deleter_bat:
+                deleter_bat.write("DEL {} /s /f /q".format(exe_path))
+        except:
+            traceback.print_exc()
+
+"""
 if __name__ == "__main__":
     start_time = time.time()
     ved = VirtualEnvironmentDetector()
@@ -291,3 +297,4 @@ if __name__ == "__main__":
     print(ved.get_ram_size())
     print(ved.neo_takes_blue_pill())
     input("ENTER to exit.")
+"""

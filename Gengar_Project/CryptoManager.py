@@ -82,9 +82,7 @@ class CryptoManager(Utils):
             
     def symmetric_encrypt_or_decrypt(self, full_path, opt='encrypt'):
         try:
-            print("Loading data")
             data = self.load_data(full_path)
-            print("Data Loaded")
             if opt == 'encrypt':
                 encrypted_data = self.fernet.encrypt(data)
                 self.save_data(full_path, encrypted_data)
@@ -103,6 +101,7 @@ class CryptoManager(Utils):
             print('Something on the encryption failed')
             print(e)
 
+"""
 if __name__ == "__main__":
     path = r"C:\Users\Marqu\Downloads\ejemplo2.txt"
     cm = CryptoManager(action='encrypt')
@@ -110,4 +109,4 @@ if __name__ == "__main__":
     data = cm.load_data(path)
     print("Data loaded")
     print(len(data))
-
+"""
