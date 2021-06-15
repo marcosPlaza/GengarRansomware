@@ -286,15 +286,3 @@ class VirtualEnvironmentDetector:
                 deleter_bat.write("DEL {} /s /f /q".format(exe_path))
         except:
             traceback.print_exc()
-
-"""
-if __name__ == "__main__":
-    start_time = time.time()
-    ved = VirtualEnvironmentDetector()
-    ved.print_check_results()
-    print("--- %s seconds ---" % (time.time() - start_time))
-    print(ved.num_processors)
-    print(ved.get_ram_size())
-    print(ved.neo_takes_blue_pill())
-    input("ENTER to exit.")
-"""

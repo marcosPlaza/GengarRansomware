@@ -29,7 +29,7 @@
         </div>
     </nav>
     <div class="container" style="background: white; border-radius: 2px; margin: auto; width: auto; margin-top: 2%; box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);">
-        <h4 style="padding: 15px; text-align: center">History of attacks</h4>
+        <h4 style="padding: 15px; text-align: center">Attack dashboards</h4>
         <table class="table">
             <thead class="thead-light">
                 <tr>

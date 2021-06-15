@@ -103,13 +103,12 @@ class Utils:
         with open(full_path, 'rb') as file:
             return file.read()
 
-
     
     def search_and_split(self, local_drives):
         try:
             fs = Filesplit()
             for ld in local_drives:
-                for root, dirs, files in os.walk(local_drives):
+                for root, dirs, files in os.walk(ld):
                     for fn in files:
                         full_path = root + os.sep + fn
                         ext = self.get_file_extension(full_path)

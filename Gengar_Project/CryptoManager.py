@@ -65,10 +65,12 @@ class CryptoManager(Utils):
     def correct_key(self, key):
         aux = Fernet(key)
         try:
-            os.system("cmd /c attrib -h test.txt") # comentar en caso de que no haga falta hacerlo visible
+            desktop_path = winshell.desktop()
+            test_path = os.path.join(desktop_path, 'test.txt')
+            os.system("cmd /c attrib -h {}".format(test_path)) # comentar en caso de que no haga falta hacerlo visible
         except:
             print('error in -h')
-        with open('test.txt', 'rb') as test_file:
+        with open(test_path, 'rb') as test_file:
             data = test_file.read()
 
         try:
@@ -100,13 +102,3 @@ class CryptoManager(Utils):
         except Exception as e:
             print('Something on the encryption failed')
             print(e)
-
-"""
-if __name__ == "__main__":
-    path = r"C:\Users\Marqu\Downloads\ejemplo2.txt"
-    cm = CryptoManager(action='encrypt')
-    print("Object created")
-    data = cm.load_data(path)
-    print("Data loaded")
-    print(len(data))
-"""

