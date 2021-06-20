@@ -18,7 +18,7 @@ Interpretación propia del *malware*. Por el momento cuenta con las siguientes c
 
 Para obtener el *payload* como ejecutable, estar en el directorio ``GengarProject`` y ejecutar ``pyinstaller`` . Debemos asegurar que los parámetros que le pasamos a la función execute estan a ``True`` si se quiere; realizar el control anti máquinas virtuales (``antivm=True``), enviar peticion al servidor (``send_post=True``) o si se desea utilizar en su versión ejecutable (``executable=True``).
 
-````powershell
+````
 pyinstaller --onefile --windowed Encryption_Protocol.py
 ````
 
