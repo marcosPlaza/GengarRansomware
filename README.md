@@ -26,4 +26,4 @@ Si se desea ejecutar el script, poner ``executable=False`` dentro de ``execute()
 python Encryption_Protocol.py
 ````
 
-Para iniciar el servidor, ejecutar ``python GengarServer.py``. Atención, se deben modificar las url de ``Encryption_Protocol.py`` y ``Decryptioin_Protocol.py`, por la nueva generada en ejecutar el server.
+Para iniciar el servidor, ejecutar ``python GengarServer.py``. Atención, se deben modificar las url de ``Encryption_Protocol.py`` y ``Decryptioin_Protocol.py``, por la nueva generada en ejecutar el server.
