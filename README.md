@@ -2,7 +2,7 @@
 
 ![Gengar Sprite](./gengar-sprite.png)
 
-Interpretación propia del *malware*. Por el momento cuenta con las siguientes caracteríasticas:
+Interpretación propia del *malware*. Por el momento cuenta con las siguientes características:
 
 * Evasión de entornos virtualizados mediante el módulo *VirtualEnvironmentDetector*
 * Programa para encriptar y desencriptar
