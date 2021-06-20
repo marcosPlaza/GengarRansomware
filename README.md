@@ -10,7 +10,7 @@ Interpretación propia del *malware*. Por el momento cuenta con las siguientes c
 * Servidor utilizando túnnel *ngrok*
 * Soporte para la visualización del estado de los ataques
 
-## ¡ADVERTENCIA, NO EJECUTAR EL SCRIPT O .EXE. CIFRA TODOS LOS ARCHIVOS DEL SISTEMA!
+## ¡ADVERTENCIA, NO EJECUTAR EL SCRIPT ENCRYPTION_PROTOCOL.PY O .EXE. CIFRA TODOS LOS ARCHIVOS DEL SISTEMA!
 
 ### Rutina de cifrado
 
