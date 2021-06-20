@@ -2,7 +2,7 @@
 # coding: utf-8
 import sys
 import ctypes
-
+# NOT USED
 def run_as_admin(argv=None, debug=False):
     shell32 = ctypes.windll.shell32
     if argv is None and shell32.IsUserAnAdmin():

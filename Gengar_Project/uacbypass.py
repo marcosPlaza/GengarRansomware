@@ -1,5 +1,6 @@
 # https://medium.com/@tommelo/bypassing-windows-10-uac-with-python-aed3c835c4f0
 
+# NOT USED
 import os
 import sys
 import ctypes

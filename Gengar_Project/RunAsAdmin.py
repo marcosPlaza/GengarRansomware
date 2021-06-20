@@ -3,7 +3,7 @@ import sys
 import ctypes
 import os
 import traceback
-
+# NOT USED
 class RunAsAdmin():
     # returning true if script is executing as admin
     def isAdmin(self):
