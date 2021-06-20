@@ -1,6 +1,7 @@
 import base64
 from cryptography.fernet import Fernet
 
+# NOT USED
 class KeyManager():
     def __init__(self, key_bytes=None):
         if key_bytes is not None:

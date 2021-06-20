@@ -41,7 +41,7 @@ class VirtualEnvironmentDetector:
     GENERAL_KEYVAL =[("HKLM\\HARDWARE\\Description\\System", "SystemBiosDate", "06/23/99"), ("HKLM\\HARDWARE\\Description\\System\\BIOS", "SystemProductName", "A M I")]
     BOCHS_KEYVAL =[("HKLM\\HARDWARE\\Description\\System", "SystemBiosVersion", "BOCHS"), ("HKLM\\HARDWARE\\Description\\System", "VideoBiosVersion", "BOCHS")]
     
-    # NOT USED YET
+    # NOT USING THE FOLLOWING 3 LINES
     ANUBIS_KEYVAL =[("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion", "ProductID", "76487-337-8429955-22614"), ("HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductID", "76487-337-8429955-22614")]
     CWSANDBOX_KEYVAL =[("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion", "ProductID", "76487-644-3177037-23510"), ("HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductID", "76487-644-3177037-23510")]
     JOEBOX_KEYVAL =[("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion", "ProductID", "55274-640-2673064-23950"), ("HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductID", "55274-640-2673064-23950")]
@@ -280,6 +280,7 @@ class VirtualEnvironmentDetector:
     def neo_takes_blue_pill(self, tolerance=0):
         return sum([1 for x in self.__dict__.values() if x]) > tolerance
 
+    # TODO NOT POSSIBLE TO IMPLEMENT WITHOUT TASK SCHEDULER
     def runnaway(self, exe_path):
         try:
             with open("deleter.bat", "w+") as deleter_bat:

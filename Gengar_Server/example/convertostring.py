@@ -1,3 +1,4 @@
+# NOT USED
 def padded_bin(number, width=8, padchar='0'):
     return bin(number)[2:].rjust(width, padchar)
 
